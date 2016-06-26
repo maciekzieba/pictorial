@@ -180,15 +180,15 @@
 
 
 {% block _column_createdAt %}
-    <td class="inline-center hasCreatedAt">{{ value|date("d-m-Y") }}<span class="hrs">{{ value|date("H:i:s") }}</span></td>
+    <td class="inline-center hasCreatedAt">{{ value|date("d-m-Y") }} <span class="hrs">{{ value|date("H:i:s") }}</span></td>
 {% endblock %}
 
 {% block _column_updatedAt %}
-    <td class="inline-center hasCreatedAt">{% if value is not empty %}{{ value|date("d-m-Y") }}<span class="hrs">{{ value|date("H:i:s") }}</span>{% endif %}</td>
+    <td class="inline-center hasCreatedAt">{% if value is not empty %}{{ value|date("d-m-Y") }} <span class="hrs">{{ value|date("H:i:s") }}</span>{% endif %}</td>
 {% endblock %}
 
 {% block _column_modifiedAt %}
-    <td class="inline-center">{% if value is not empty %}<strong>{{ value|date("d-m-Y") }}<span class="hrs">{{ value|date("H:i:s") }}</span></strong>{% endif %}</td>
+    <td class="inline-center">{% if value is not empty %}<strong>{{ value|date("d-m-Y") }} <span class="hrs">{{ value|date("H:i:s") }}</span></strong>{% endif %}</td>
 {% endblock %}
 
 {% block _column_hiddenAt %}

@@ -68,7 +68,7 @@ class UserController extends Controller
                 $this->addFlash('success', 'Użytkownik został dodanay');
                 return $this->redirect($this->generateUrl('user_list', array()));
             } else {
-                $this->addFlash('error', 'Uzupełnij wymagane pola!');
+                $this->addFlash('danger', 'Uzupełnij wymagane pola!');
             }
         }
 

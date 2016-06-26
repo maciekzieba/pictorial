@@ -36,25 +36,11 @@ class Package
     private $updatedAt;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="number", type="string", length=128, nullable=false)
+     * @ORM\Column(name="validity_date", type="datetime", nullable=false)
      */
-    private $number;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="month", type="integer", nullable=false)
-     */
-    private $month;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="year", type="integer", nullable=false)
-     */
-    private $year;
+    private $validityDate;
 
     /**
      * @var integer
@@ -176,78 +162,6 @@ class Package
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * Set number
-     *
-     * @param string $number
-     *
-     * @return Package
-     */
-    public function setNumber($number)
-    {
-        $this->number = $number;
-
-        return $this;
-    }
-
-    /**
-     * Get number
-     *
-     * @return string
-     */
-    public function getNumber()
-    {
-        return $this->number;
-    }
-
-    /**
-     * Set month
-     *
-     * @param integer $month
-     *
-     * @return Package
-     */
-    public function setMonth($month)
-    {
-        $this->month = $month;
-
-        return $this;
-    }
-
-    /**
-     * Get month
-     *
-     * @return integer
-     */
-    public function getMonth()
-    {
-        return $this->month;
-    }
-
-    /**
-     * Set year
-     *
-     * @param integer $year
-     *
-     * @return Package
-     */
-    public function setYear($year)
-    {
-        $this->year = $year;
-
-        return $this;
-    }
-
-    /**
-     * Get year
-     *
-     * @return integer
-     */
-    public function getYear()
-    {
-        return $this->year;
     }
 
     /**
@@ -440,5 +354,31 @@ class Package
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getValidityDate()
+    {
+        return $this->validityDate;
+    }
+
+    /**
+     * @param $validityDate
+     * @return $this
+     */
+    public function setValidityDate($validityDate)
+    {
+        $this->validityDate = $validityDate;
+        return $this;
+    }
+
+    public function getPriceNetPerVisit()
+    {
+        if ($this->visitsQuantity > 0) {
+            return ($this->priceNet / $this->visitsQuantity);
+        }
+        return 0.00;
     }
 }
