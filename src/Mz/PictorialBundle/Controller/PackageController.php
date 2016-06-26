@@ -2,7 +2,6 @@
 
 namespace Mz\PictorialBundle\Controller;
 
-use Edge\XNewsBundle\Service\UserService;
 use FOS\UserBundle\Model\UserManager;
 use Mz\PictorialBundle\Entity\Package;
 use Mz\PictorialBundle\Entity\User;
@@ -63,7 +62,7 @@ class PackageController extends Controller
                 $this->addFlash('success', 'Pakiet został dodanay');
                 return $this->redirect($this->generateUrl('package_list', array()));
             } else {
-                $this->addFlash('danger', 'Uzupełnij wymagane pola!');
+
             }
         }
 
@@ -88,7 +87,7 @@ class PackageController extends Controller
                 $this->addFlash('success', 'Pakiet został zapisany');
                 return $this->redirect($this->generateUrl('package_list', array()));
             } else {
-                $this->addFlash('danger', 'Uzupełnij wymagane pola!');
+
             }
         }
 

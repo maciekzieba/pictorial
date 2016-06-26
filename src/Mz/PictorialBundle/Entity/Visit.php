@@ -87,7 +87,7 @@ class Visit
     /**
      * @var string
      *
-     * @ORM\Column(name="card_number", type="string", length=64, nullable=false)
+     * @ORM\Column(name="card_number", type="string", length=64, nullable=true)
      */
     private $cardNumber;
 
@@ -145,42 +145,42 @@ class Visit
      *
      * @ORM\Column(name="scounting_share", type="float", precision=10, scale=0, nullable=true)
      */
-    private $scountingShare;
+    private $scountingShare = 5.00;
 
     /**
      * @var float
      *
      * @ORM\Column(name="photo_share", type="float", precision=10, scale=0, nullable=true)
      */
-    private $photoShare;
+    private $photoShare = 50.00;
 
     /**
      * @var float
      *
      * @ORM\Column(name="interview_share", type="float", precision=10, scale=0, nullable=true)
      */
-    private $interviewShare;
+    private $interviewShare = 20.00;
 
     /**
      * @var float
      *
      * @ORM\Column(name="postproduction_share", type="float", precision=10, scale=0, nullable=true)
      */
-    private $postproductionShare;
+    private $postproductionShare = 15.00;
 
     /**
      * @var float
      *
      * @ORM\Column(name="editing_share", type="float", precision=10, scale=0, nullable=true)
      */
-    private $editingShare;
+    private $editingShare = 5.00;
 
     /**
      * @var float
      *
      * @ORM\Column(name="provision_share", type="float", precision=10, scale=0, nullable=true)
      */
-    private $provisionShare;
+    private $provisionShare = 5.00;
 
     /**
      * @var float
@@ -1082,4 +1082,71 @@ class Visit
     {
         return $this->provisionOwner;
     }
+
+    /**
+     * @return float
+     */
+    public function getPriceNetScouting()
+    {
+        if ($this->package instanceof Package) {
+            return ($this->package->getPriceNetPerVisit()*$this->getScountingShare())/100;
+        }
+        return 0.00;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPriceNetPhoto()
+    {
+        if ($this->package instanceof Package) {
+            return ($this->package->getPriceNetPerVisit()*$this->getPhotoShare())/100;
+        }
+        return 0.00;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPriceNetEditing()
+    {
+        if ($this->package instanceof Package) {
+            return ($this->package->getPriceNetPerVisit()*$this->getEditingShare())/100;
+        }
+        return 0.00;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPriceNetInterview()
+    {
+        if ($this->package instanceof Package) {
+            return ($this->package->getPriceNetPerVisit()*$this->getInterviewShare())/100;
+        }
+        return 0.00;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPriceNetPostproduction()
+    {
+        if ($this->package instanceof Package) {
+            return ($this->package->getPriceNetPerVisit()*$this->getPostproductionShare())/100;
+        }
+        return 0.00;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPriceNetProvision()
+    {
+        if ($this->package instanceof Package) {
+            return ($this->package->getPriceNetPerVisit()*$this->getProvisionShare())/100;
+        }
+        return 0.00;
+    }
+
 }

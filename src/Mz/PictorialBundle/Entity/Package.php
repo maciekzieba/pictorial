@@ -2,6 +2,7 @@
 
 namespace Mz\PictorialBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -104,7 +105,30 @@ class Package
      */
     private $createdBy;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Visit", mappedBy="package", cascade="persist", orphanRemoval=true)
+     */
+    private $visits;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->visits = new ArrayCollection();
+    }
+
+    /**
+     * Get articles
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVisits()
+    {
+        return $this->visits;
+    }
 
     /**
      * Get id
@@ -374,11 +398,30 @@ class Package
         return $this;
     }
 
+    /**
+     * @return float
+     */
     public function getPriceNetPerVisit()
     {
         if ($this->visitsQuantity > 0) {
             return ($this->priceNet / $this->visitsQuantity);
         }
         return 0.00;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVisitsLeft()
+    {
+        return $this->visitsQuantity - count($this->visits);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->id." ".$this->validityDate->format("m/Y")." (Pozostało:".($this->getVisitsLeft()).")";
     }
 }

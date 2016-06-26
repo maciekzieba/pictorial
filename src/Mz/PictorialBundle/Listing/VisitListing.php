@@ -12,25 +12,26 @@ namespace Mz\PictorialBundle\Listing;
 use Doctrine\ORM\QueryBuilder;
 use Mz\PictorialBundle\Entity\User;
 use Mz\PictorialBundle\Service\PackageService;
+use Mz\PictorialBundle\Service\VisitService;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use PawelLen\DataTablesListing\Filter\FilterBuilderInterface;
 use PawelLen\DataTablesListing\Column\ColumnBuilderInterface;
 use PawelLen\DataTablesListing\Type\AbstractType;
 
 
-class PackageListing extends AbstractType
+class VisitListing extends AbstractType
 {
 
 
-    /** @var  PackageService */
-    protected $packageService;
+    /** @var  VisitService */
+    protected $visitService;
 
     /**
-     * @param PackageService $packageService
+     * @param VisitService $visitService
      */
-    public function __construct(PackageService $packageService)
+    public function __construct(VisitService $visitService)
     {
-        $this->packageService = $packageService;
+        $this->visitService = $visitService;
     }
 
     public function buildFilters(FilterBuilderInterface $builder, array $options)
@@ -57,27 +58,19 @@ class PackageListing extends AbstractType
             ->add('createdAt', 'column', array(
                 'label' => 'Utworzony',
             ))
-            ->add('validityDate', 'column', array(
-                'label' => 'Data pakietu',
-            ))
-            ->add('visitsLeft', 'column', array(
-                'label' => 'Pozostało wizyt'
-            ))
-            ->add('visitsQuantity', 'column', array(
-                'label' => 'Liczba wizyt',
-            ))
-            ->add('priceNet', 'column', array(
-                'label' => 'Cena netto',
-            ))
-            ->add('priceNetPerVisit', 'column', array(
-                'label' => 'Cena netto per wizyta',
-            ))
-            ->add('status', 'column', array(
-                'label' => 'Status',
+            ->add('realizationStatus', 'column', array(
+                'label' => 'Status realizacji',
                 'callback' => function ($value) {
-                    return $this->packageService->getStatusText($value);
+                    return $this->visitService->getRealizationStatusesText($value);
                 }
             ))
+            ->add('paymentStatus', 'column', array(
+                'label' => 'Status płatności',
+                'callback' => function ($value) {
+                    return $this->visitService->getPaymentStatusesText($value);
+                }
+            ))
+
             ->add('actions', 'column', array(
                 'label' => 'Akcje'
             ))
@@ -89,8 +82,8 @@ class PackageListing extends AbstractType
     {
         $resolver->setDefaults(array(
             'query_builder' => function (QueryBuilder $builder) {
-                $builder->select('p')
-                    ->from('MzPictorialBundle:Package', 'p');
+                $builder->select('v')
+                    ->from('MzPictorialBundle:Visit', 'v');
 
             },
         ));
@@ -99,7 +92,7 @@ class PackageListing extends AbstractType
 
     public function getName()
     {
-        return 'package_list';
+        return 'visit_list';
     }
 
 }

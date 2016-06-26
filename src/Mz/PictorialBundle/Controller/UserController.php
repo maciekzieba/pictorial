@@ -2,7 +2,6 @@
 
 namespace Mz\PictorialBundle\Controller;
 
-use Edge\XNewsBundle\Service\UserService;
 use FOS\UserBundle\Model\UserManager;
 use Mz\PictorialBundle\Entity\User;
 use Mz\PictorialBundle\Form\UserForm;
@@ -68,7 +67,7 @@ class UserController extends Controller
                 $this->addFlash('success', 'Użytkownik został dodanay');
                 return $this->redirect($this->generateUrl('user_list', array()));
             } else {
-                $this->addFlash('danger', 'Uzupełnij wymagane pola!');
+
             }
         }
 
