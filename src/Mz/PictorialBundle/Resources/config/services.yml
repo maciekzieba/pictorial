@@ -1,0 +1,7 @@
+services:
+    pictorial.subscriber.entity_life_cycle:
+        class: Mz\PictorialBundle\EventListener\EntityLifeCycleSubscriber
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        arguments:
+            container: "@service_container"

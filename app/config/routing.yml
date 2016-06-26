@@ -1,0 +1,5 @@
+mz_pictorial:
+    resource: "@MzPictorialBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
