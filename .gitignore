@@ -1,0 +1,30 @@
+#symfony
+
+/web/bundles/
+/app/bootstrap*
+/app/cache/*
+/app/logs/*
+/vendor/
+/bin/
+/app/config/parameters.yml
+/nbproject/private/
+/web/.htaccess
+
+#log and IDE files
+*.log
+/.idea*
+/log*
+
+#other temporary files
+.DS_Store
+*~
+*.swp
+*.swo
+*.tar.gz
+*.gz
+*.zip
+*.bak
+LICENSE
+UPGRADE*
+composer.lock
+composer.phar
