@@ -26,8 +26,10 @@ class AppKernel extends Kernel
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new FOS\UserBundle\FOSUserBundle(),
 
+
             //Others
             new Mz\PictorialBundle\MzPictorialBundle(),
+            new PawelLen\DataTablesListing\DataTablesListingBundle(),
 
         );
 

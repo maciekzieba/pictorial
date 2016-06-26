@@ -3,3 +3,5 @@ mz_pictorial:
     type:     annotation
     prefix:   /
 
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

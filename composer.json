@@ -25,7 +25,8 @@
         "friendsofsymfony/jsrouting-bundle": "^1.5",
         "knplabs/knp-menu-bundle": "~2.0",
         "stfalcon/tinymce-bundle": "^0.3.8",
-        "friendsofsymfony/user-bundle": "2.0.0-alpha3"
+        "friendsofsymfony/user-bundle": "2.0.0-alpha3",
+        "pawellen/data-tables-listing": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

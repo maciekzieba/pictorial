@@ -1,0 +1,197 @@
+
+{% block listing_header_scripts %}
+    {% if include_jquery and jquery_js %}
+        <script type="text/javascript" src="{{ jquery_js }}" charset="utf8"></script>
+    {% endif %}
+    {% if datatables_js %}
+        <script src="{{ datatables_js }}" charset="utf8"></script>
+    {% endif %}
+    <script type="text/javascript" src="{{ asset('bundles/datatableslisting/js/listing.js') }}" charset="utf8"></script>
+{% endblock %}
+
+
+{% block listing_header_styles %}
+    {% if datatables_css %}
+        <link rel="stylesheet"href="{{ datatables_css }}">
+    {% endif %}
+{% endblock %}
+
+
+{% block listing_assets %}
+    {% spaceless %}
+        {{ block('listing_header_styles') }}
+        {{ block('listing_header_scripts') }}
+    {% endspaceless %}
+{% endblock %}
+
+
+{% block listing_widget_attributes -%}
+    {%- for attrname, attrvalue in attr -%}
+        {{- " " -}}
+        {%- if attrname in ['placeholder', 'title'] -%}
+            {{- attrname }}="{{ attrvalue|trans({}, translation_domain) }}"
+        {%- elseif attrvalue is sameas(true) -%}
+            {{- attrname }}="{{ attrname }}"
+        {%- elseif attrvalue is not sameas(false) and attrvalue is not iterable -%}
+            {{- attrname }}="{{ attrvalue }}"
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock listing_widget_attributes %}
+
+
+{%- block listing_header_column -%}
+    <th {{ block('listing_widget_attributes') }}>{{ label|trans }}</th>
+{%- endblock listing_header_column -%}
+
+
+{%- block listing_column -%}
+    {% spaceless %}
+        {% set _block = block('_column_' ~ column.name) %}
+
+        {% if _block %}
+            {{ _block|raw }}
+        {% else %}
+            <td {% if class is defined %}class="{{ class }}"{% endif %}>
+                {% if options.route is defined %}
+                    <a href="{{ path(options.route, parameters) }}">{{ value }}</a>
+                {% else %}
+                    {{ value }}
+                {% endif %}
+            </td>
+        {% endif %}
+    {% endspaceless %}
+{%- endblock listing_column -%}
+
+
+{%- block listing_button -%}
+    {% spaceless %}
+        {% set _block = block('_button_' ~ column.name) %}
+        {% if _block %}
+            {{ _block|raw }}
+        {% else %}
+            <td>
+                <a href="{{ path(route, parameters) }}">{{ label|trans }}</a>
+            </td>
+        {% endif %}
+    {% endspaceless %}
+{%- endblock listing_button -%}
+
+
+{%- block listing_checkbox -%}
+    {% spaceless %}
+        {% set _block = block('_checkbox_' ~ column.name) %}
+        {% if _block %}
+            {{ _block|raw }}
+        {% else %}
+            <td>
+                <input type="checkbox" name="{{ name }}[]" value="{{ value }}" />
+            </td>
+        {% endif %}
+    {% endspaceless %}
+{%- endblock listing_checkbox -%}
+
+
+{%- block listing_radio -%}
+    {% spaceless %}
+        {% set _block = block('_radio_' ~ column.name) %}
+        {% if _block %}
+            {{ _block|raw }}
+        {% else %}
+            <td>
+                <input type="radio" name="{{ name }}" value="{{ value }}" />
+            </td>
+        {% endif %}
+    {% endspaceless %}
+{%- endblock listing_radio -%}
+
+
+{% block listing_head %}
+    <thead>
+    {% for name, column in listing.columns %}
+        {% set label = column.label %}
+        {% set attr = column.attributes %}
+        {% set _block = block('_header_' ~ column.name) %}
+
+        {% if _block %}
+            {{ _block|raw }}
+        {% else %}
+            {{ block('listing_header_column') }}
+        {% endif %}
+    {% endfor %}
+    </thead>
+{% endblock %}
+
+
+{% block listing_body %}
+    <tbody>
+    {% if listing.data is not empty%}
+        {% for row in listing.data %}
+            {% set attr = row.params %}
+            <tr {{ block('listing_widget_attributes') }}>
+                {% for td in row.values %}
+                    {{ td|raw }}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    {% endif %}
+    </tbody>
+{% endblock %}
+
+
+{% block listing_footer %}
+    <tfoot>
+    </tfoot>
+{% endblock %}
+
+
+{% block listing_table %}
+<div class="table-responsive">
+    <table id="listing_table_{{ listing.name }}" class="table table-striped" data-ajaxsource="{{ listing.source }}">
+        {{ block('listing_head') }}
+        {{ block('listing_body') }}
+        {{ block('listing_footer') }}
+    </table>
+</div>
+{% endblock %}
+
+
+{% block listing_filters %}
+    <div id="listing_filters_{{ listing.name }}">
+        {{ form(listing.filtersFormView) }}
+    </div>
+{% endblock %}
+
+
+{% block listing %}
+    {% spaceless %}
+        {% if listing.hasFilters %}
+            {{ block('listing_filters') }}
+        {% endif %}
+
+        {{ block('listing_table') }}
+
+        <script>
+            var table{{ listing.name }} = DataTablesListing.initTable('{{ listing.name }}', 'listing_table_{{ listing.name }}', 'listing_filters_{{ listing.name }}', {{ listing.settingsJson|raw }});
+        </script>
+    {% endspaceless %}
+{% endblock listing %}
+
+{# Additional coluns: #}
+
+
+{% block _column_createdAt %}
+    <td class="inline-center hasCreatedAt">{{ value|date("d-m-Y") }}<span class="hrs">{{ value|date("H:i:s") }}</span></td>
+{% endblock %}
+
+{% block _column_updatedAt %}
+    <td class="inline-center hasCreatedAt">{% if value is not empty %}{{ value|date("d-m-Y") }}<span class="hrs">{{ value|date("H:i:s") }}</span>{% endif %}</td>
+{% endblock %}
+
+{% block _column_modifiedAt %}
+    <td class="inline-center">{% if value is not empty %}<strong>{{ value|date("d-m-Y") }}<span class="hrs">{{ value|date("H:i:s") }}</span></strong>{% endif %}</td>
+{% endblock %}
+
+{% block _column_hiddenAt %}
+    <td>{% if value %}Tak{% else %}Nie{% endif %}</td>
+{% endblock %}
+

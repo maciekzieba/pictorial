@@ -3,14 +3,18 @@
 namespace Mz\PictorialBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * User
  *
  * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="fk_user_user_idx", columns={"created_by"}), @ORM\Index(name="fk_user_user1_idx", columns={"updated_by"})})
  * @ORM\Entity
+ * @UniqueEntity( fields = "email", message = "Ten adres jest już używany.")
  */
-class User
+class User extends BaseUser
 {
     /**
      * @var integer
@@ -19,7 +23,7 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \DateTime
@@ -33,42 +37,22 @@ class User
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fistname", type="string", length=128, nullable=true)
+     * @ORM\Column(name="firstname", type="string", length=128, nullable=true)
      */
-    private $fistname;
+    protected $firstname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lastname", type="string", length=128, nullable=true)
      */
-    private $lastname;
+    protected $lastname;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
-     */
-    private $email;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=255, nullable=true)
-     */
-    private $password;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="roles", type="text", length=16777215, nullable=true)
-     */
-    private $roles;
 
     /**
      * @var \User
@@ -78,7 +62,7 @@ class User
      *   @ORM\JoinColumn(name="created_by", referencedColumnName="id")
      * })
      */
-    private $createdBy;
+    protected $createdBy;
 
     /**
      * @var \User
@@ -88,8 +72,15 @@ class User
      *   @ORM\JoinColumn(name="updated_by", referencedColumnName="id")
      * })
      */
-    private $updatedBy;
+    protected $updatedBy;
 
+    /**
+     * @Assert\Length(
+     *      min = 8,
+     *      minMessage = "Hasło powinno zawierać co najmniej {{ limit }} znaków",
+     * )
+     */
+    protected $plainPassword;
 
 
     /**
@@ -151,27 +142,27 @@ class User
     }
 
     /**
-     * Set fistname
+     * Set firstname
      *
-     * @param string $fistname
+     * @param string firstname
      *
      * @return User
      */
-    public function setFistname($fistname)
+    public function setFirstname($firstname)
     {
-        $this->fistname = $fistname;
+        $this->firstname = $firstname;
 
         return $this;
     }
 
     /**
-     * Get fistname
+     * Get firstname
      *
      * @return string
      */
-    public function getFistname()
+    public function getFirstname()
     {
-        return $this->fistname;
+        return $this->firstname;
     }
 
     /**
@@ -208,7 +199,7 @@ class User
     public function setEmail($email)
     {
         $this->email = $email;
-
+        $this->setUsername($email);
         return $this;
     }
 
@@ -220,54 +211,6 @@ class User
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set password
-     *
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get password
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Set roles
-     *
-     * @param string $roles
-     *
-     * @return User
-     */
-    public function setRoles($roles)
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * Get roles
-     *
-     * @return string
-     */
-    public function getRoles()
-    {
-        return $this->roles;
     }
 
     /**
@@ -316,5 +259,13 @@ class User
     public function getUpdatedBy()
     {
         return $this->updatedBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullName()
+    {
+        return trim($this->firstname . ' ' . $this->lastname);
     }
 }

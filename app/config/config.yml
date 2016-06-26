@@ -82,3 +82,10 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: Mz\PictorialBundle\Entity\User
+
+data_tables_listing:
+    default_template: listing_div_layout.html.twig
+    include_assets:
+        datatables_js: /bundles/mzpictorial/datatables/js/jquery.dataTables.min.js
+        datatables_css: /bundles/mzpictorial/datatables/css/jquery.dataTables.min.css
+        include_jquery: false
