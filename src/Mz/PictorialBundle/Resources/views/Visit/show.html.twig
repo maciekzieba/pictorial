@@ -30,8 +30,10 @@
                 <div class="panel-body">
                     <ul class="nav nav-tabs">
                         <li class=""><a href="#data" data-toggle="tab">Dane</a></li>
-                        <li class=""><a href="#settlement" data-toggle="tab">Rozliczenia</a></li>
-                        <li class=""><a href="#invoices" data-toggle="tab">Faktury</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class=""><a href="#settlement" data-toggle="tab">Rozliczenia</a></li>
+                            <li class=""><a href="#invoices" data-toggle="tab">Faktury</a></li>
+                        {% endif %}
                         <li class=""><a href="#publications" data-toggle="tab">Publikacje</a></li>
                     </ul>
 
@@ -121,6 +123,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <div class="tab-pane" id="settlement">
                             <br/>
                             <div class="row">
@@ -182,9 +185,12 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %}
                         <div class="tab-pane" id="invoices">
 
                         </div>
+                        {% endif %}
                         <div class="tab-pane" id="publications">
                             <br/>
                             <div class="row">
