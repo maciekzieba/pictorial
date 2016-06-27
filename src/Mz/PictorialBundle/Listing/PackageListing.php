@@ -54,9 +54,6 @@ class PackageListing extends AbstractType
             ->add('id', 'column', array(
                 'label' => 'Id',
             ))
-            ->add('createdAt', 'column', array(
-                'label' => 'Utworzony',
-            ))
             ->add('validityDate', 'column', array(
                 'label' => 'Data pakietu',
             ))

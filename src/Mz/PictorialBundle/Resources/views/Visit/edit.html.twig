@@ -8,6 +8,24 @@
     </div>
     <div class="row">
         <div class="col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                           Utworzono: <strong>{{ visit.createdAt|date('d/m/Y H:i') }}</strong>{% if visit.createdBy is not empty  %}, przez: <strong>{{ visit.createdBy.fullName }}</strong>{% endif %}
+                        </div>
+                        {% if visit.updatedAt is not empty  %}
+                        <div class="col-md-6">
+                            Zmodyfikowano: <strong>{{ visit.updatedAt|date('d/m/Y H:i') }}</strong>{% if visit.updatedBy is not empty  %}, przez: <strong>{{ visit.updatedBy.fullName }}</strong>{% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
             {{ form_start(form, {action: path('visit_edit', {id: visit.id}) , attr: {id: 'visitForm', novalidate: 'novalidate'} }) }}
             {{ form_errors(form) }}
 

@@ -32,6 +32,9 @@
     <script src="{{ asset('/bundles/mzpictorial/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('/bundles/mzpictorial/bootstrap/js/metisMenu.min.js') }}"></script>
     <script src="{{ asset('/bundles/mzpictorial/bootstrap/js/sb-admin-2.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+
 
     {% block javascripts %}{% endblock %}
 

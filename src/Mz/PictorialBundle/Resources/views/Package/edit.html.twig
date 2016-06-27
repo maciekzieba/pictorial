@@ -18,6 +18,24 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            Utworzono: <strong>{{ package.createdAt|date('d/m/Y H:i') }}</strong>{% if package.createdBy is not empty  %}, przez: <strong>{{ package.createdBy.fullName }}</strong>{% endif %}
+                        </div>
+                        {% if package.updatedAt is not empty  %}
+                            <div class="col-md-6">
+                                Zmodyfikowano: <strong>{{ package.updatedAt|date('d/m/Y H:i') }}</strong>{% if package.updatedBy is not empty  %}, przez: <strong>{{ package.updatedBy.fullName }}</strong>{% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             {{ form_start(form, {action: path('package_edit', {id: package.id}) , attr: {id: 'packageForm', novalidate: 'novalidate'} }) }}
             {{ form_errors(form) }}

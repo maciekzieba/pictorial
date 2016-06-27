@@ -55,8 +55,34 @@ class VisitListing extends AbstractType
             ->add('id', 'column', array(
                 'label' => 'Id',
             ))
-            ->add('createdAt', 'column', array(
-                'label' => 'Utworzony',
+            ->add('number', 'column', array(
+                'label' => 'Numer',
+            ))
+            ->add('visitDate', 'column', array(
+                'label' => 'Data wizyty',
+            ))
+            ->add('package', 'column', array(
+                'label' => 'Pakiet',
+                'property' => 'package.fullName'
+            ))
+            ->add('photoOwner', 'column', array(
+                'label' => 'Zdjęcia',
+                'property' => 'photoOwner.fullName'
+            ))
+            ->add('firstname', 'column', array(
+                'label' => 'Imię',
+            ))
+            ->add('lastname', 'column', array(
+                'label' => 'Nazwisko',
+            ))
+            ->add('city', 'column', array(
+                'label' => 'Miasto',
+            ))
+            ->add('district', 'column', array(
+                'label' => 'Dzielnica',
+            ))
+            ->add('cardNumber', 'column', array(
+                'label' => 'Numer karty',
             ))
             ->add('realizationStatus', 'column', array(
                 'label' => 'Status realizacji',
@@ -82,8 +108,10 @@ class VisitListing extends AbstractType
     {
         $resolver->setDefaults(array(
             'query_builder' => function (QueryBuilder $builder) {
-                $builder->select('v')
-                    ->from('MzPictorialBundle:Visit', 'v');
+                $builder->select('v, p, po')
+                    ->from('MzPictorialBundle:Visit', 'v')
+                    ->leftJoin('v.package', 'p')
+                    ->leftJoin('v.photoOwner', 'po');
 
             },
         ));

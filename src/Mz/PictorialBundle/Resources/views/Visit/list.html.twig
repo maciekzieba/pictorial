@@ -31,6 +31,10 @@
     </td>
 {% endblock %}
 
+{% block _column_visitDate %}
+    <td>{{ value|date("d-m-Y") }}</td>
+{% endblock %}
+
 {% block listing_filters %}
     <div id="listing_filters_{{ listing.name }}" class="">
         <div class="row">
