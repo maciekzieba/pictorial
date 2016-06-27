@@ -95,6 +95,13 @@ class Visit
     /**
      * @var string
      *
+     * @ORM\Column(name="lp_id", type="string", length=64, nullable=true)
+     */
+    private $lpId;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="contact_source", type="string", length=45, nullable=true)
      */
     private $contactSource;
@@ -553,6 +560,30 @@ class Visit
     public function getCardNumber()
     {
         return $this->cardNumber;
+    }
+
+    /**
+     * Set lpId
+     *
+     * @param string $lpId
+     *
+     * @return Visit
+     */
+    public function setLpId($lpId)
+    {
+        $this->lpId = $lpId;
+
+        return $this;
+    }
+
+    /**
+     * Get lpId
+     *
+     * @return string
+     */
+    public function getLpId()
+    {
+        return $this->lpId;
     }
 
     /**

@@ -81,6 +81,11 @@ class VisitForm extends AbstractType
                 'constraints' => array(
                 )
             ))
+            ->add('lpId', 'text', array(
+                'label' => 'LP ID',
+                'constraints' => array(
+                )
+            ))
             ->add('contactSource', 'choice', array(
                 'label' => 'Skąd kontakt',
                 'choices' => $this->visitService->getContactSources(),
