@@ -3,6 +3,8 @@
 namespace Mz\PictorialBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Mz\PictorialBundle\Entity\Package;
+use Mz\PictorialBundle\Entity\Visit;
 use Mz\PictorialBundle\Form\Type\DateMonthType;
 use Mz\PictorialBundle\Service\PackageService;
 use Mz\PictorialBundle\Service\VisitService;
@@ -128,21 +130,6 @@ class VisitForm extends AbstractType
                 'constraints' => array(
                 )
             ))
-            ->add('package', 'entity', array(
-                'label' => 'Pakiet',
-                'class' => 'MzPictorialBundle:Package',
-                'property' => 'fullName',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('p')
-                            ->leftJoin('p.visits', 'v')
-                            ->groupBy('p.id')
-                            ->having('(p.visitsQuantity - COUNT(v.id)) > 0')
-                        ;
-                },
-                'constraints' => array(
-                    new Assert\NotBlank()
-                )
-            ))
             ->add('scountingOwner', 'entity', array(
                 'label' => 'Scouting '.number_format($this->visitService->getDefaultScountingShare(), 2,".", "")."%",
                 'class' => 'MzPictorialBundle:User',
@@ -235,6 +222,42 @@ class VisitForm extends AbstractType
             ))
         ;
 
+        $packageEvent = function (FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData();
+
+            if ($data instanceof Visit && $data->getId() && $data->getPackage() instanceof Package) {
+                $queryBuilder = function (EntityRepository $er) use ($data) {
+                    return $er->createQueryBuilder('p')
+                        ->leftJoin('p.visits', 'v')
+                        ->groupBy('p.id')
+                        ->having('(p.visitsQuantity - COUNT(v.id)) > 0 OR (p.id = :packageId) ')
+                        ->setParameter('packageId', $data->getPackage()->getId())
+                        ;
+                };
+            } else {
+                $queryBuilder = function (EntityRepository $er) use ($data) {
+                    return $er->createQueryBuilder('p')
+                        ->leftJoin('p.visits', 'v')
+                        ->groupBy('p.id')
+                        ->having('(p.visitsQuantity - COUNT(v.id)) > 0')
+                        ;
+                };
+            }
+
+            $form->add('package', 'entity', array(
+                'label' => 'Pakiet',
+                'class' => 'MzPictorialBundle:Package',
+                'property' => 'fullName',
+                'query_builder' => $queryBuilder,
+                'constraints' => array(
+                    new Assert\NotBlank()
+                )
+            ));
+
+
+        };
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, $packageEvent);
     }
 
 

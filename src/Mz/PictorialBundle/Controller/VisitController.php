@@ -27,6 +27,19 @@ class VisitController extends Controller
     protected $visitService;
 
     /**
+     * @Route("/visit/{id}/show", name="visit_show", requirements={"id": "\d+"})
+     * @Template()
+     */
+    public function showAction(Request $request, $id)
+    {
+        $visit = $this->visitService->demandVisit($id);
+        return array(
+            'visit' => $visit
+        );
+    }
+
+
+    /**
      * @Route("/admin/visit/list", name="visit_list")
      * @Template()
      */

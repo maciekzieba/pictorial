@@ -2,6 +2,7 @@
 
 namespace Mz\PictorialBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -279,7 +280,30 @@ class Visit
      */
     private $provisionOwner;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Publication", mappedBy="visit", cascade="persist", orphanRemoval=true)
+     */
+    private $publications;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->visits = new ArrayCollection();
+    }
+
+    /**
+     * Get publications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPublications()
+    {
+        return $this->publications;
+    }
 
     /**
      * Get id

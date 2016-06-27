@@ -121,7 +121,7 @@ class Package
     }
 
     /**
-     * Get articles
+     * Get visits
      *
      * @return \Doctrine\Common\Collections\Collection
      */

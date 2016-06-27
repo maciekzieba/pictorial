@@ -35,12 +35,20 @@ class PackageListing extends AbstractType
 
     public function buildFilters(FilterBuilderInterface $builder, array $options)
     {
-        $builder->
-            add('id', 'search', array(
+        $builder
+            ->add('id', 'search', array(
                 'label' => 'Id',
                 'filter' => array(
                     'expression' => "p.id LIKE ?",
                     'eval' => '%like%'
+                )
+            ))
+            ->add('status', 'choice', array(
+                'label' => 'Status',
+                'choices' => $this->packageService->getStatuses(),
+                'placeholder' => '',
+                'filter' => array(
+                    'expression' => "p.status = ?",
                 )
             ))
 
@@ -71,12 +79,14 @@ class PackageListing extends AbstractType
             ))
             ->add('status', 'column', array(
                 'label' => 'Status',
+                'order_by' => false,
                 'callback' => function ($value) {
                     return $this->packageService->getStatusText($value);
                 }
             ))
             ->add('actions', 'column', array(
-                'label' => 'Akcje'
+                'label' => 'Akcje',
+                'order_by' => false
             ))
         ;
     }

@@ -9,6 +9,7 @@
 
 namespace Mz\PictorialBundle\Listing;
 
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Mz\PictorialBundle\Entity\User;
 use Mz\PictorialBundle\Service\PackageService;
@@ -36,15 +37,60 @@ class VisitListing extends AbstractType
 
     public function buildFilters(FilterBuilderInterface $builder, array $options)
     {
-        $builder->
-            add('id', 'search', array(
-                'label' => 'Id',
+        $builder
+            ->add('query', 'search', array(
+                'label' => 'Szukaj',
                 'filter' => array(
-                    'expression' => "p.id LIKE ?",
+                    'expression' => "v.number LIKE ? OR v.city LIKE ? OR v.district LIKE ? OR v.firstname LIKE ? OR v.lastname LIKE ?",
                     'eval' => '%like%'
                 )
             ))
+            ->add('realizationStatus', 'choice', array(
+                'label' => 'Status realizacji',
+                'choices' => $this->visitService->getRealizationStatuses(),
+                'placeholder' => '',
+                'filter' => array(
+                    'expression' => "v.realizationStatus LIKE ?",
+                )
 
+            ))
+            ->add('paymentStatus', 'choice', array(
+                'label' => 'Status płatności',
+                'choices' => $this->visitService->getPaymentStatuses(),
+                'placeholder' => '',
+                'filter' => array(
+                    'expression' => "v.paymentStatus LIKE ?",
+                )
+            ))
+            ->add('photoOwner', 'entity', array(
+                'label' => 'Zdjęcia',
+                'class' => 'MzPictorialBundle:User',
+                'property' => 'fullName',
+                'placeholder' => '',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->where('u.roles LIKE :roles')
+                        ->setParameter('roles', '%ADMIN%')
+                        ->orderBy('u.id')
+                        ;
+                },
+                'filter' => array(
+                    'expression' => "v.photoOwner = ?",
+                )
+            ))
+            ->add('package', 'entity', array(
+                'label' => 'Pakiet',
+                'class' => 'MzPictorialBundle:Package',
+                'property' => 'fullName',
+                'placeholder' => '',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('p')
+                        ;
+                },
+                'filter' => array(
+                    'expression' => "v.package = ?",
+                )
+            ))
         ;
 
     }
@@ -52,9 +98,6 @@ class VisitListing extends AbstractType
     public function buildColumns(ColumnBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('id', 'column', array(
-                'label' => 'Id',
-            ))
             ->add('number', 'column', array(
                 'label' => 'Numer',
             ))
@@ -63,7 +106,8 @@ class VisitListing extends AbstractType
             ))
             ->add('package', 'column', array(
                 'label' => 'Pakiet',
-                'property' => 'package.fullName'
+                'property' => 'package.fullName',
+                'order_by' => false
             ))
             ->add('photoOwner', 'column', array(
                 'label' => 'Zdjęcia',
@@ -71,9 +115,11 @@ class VisitListing extends AbstractType
             ))
             ->add('firstname', 'column', array(
                 'label' => 'Imię',
+                'order_by' => false
             ))
             ->add('lastname', 'column', array(
                 'label' => 'Nazwisko',
+                'order_by' => false
             ))
             ->add('city', 'column', array(
                 'label' => 'Miasto',
@@ -81,24 +127,24 @@ class VisitListing extends AbstractType
             ->add('district', 'column', array(
                 'label' => 'Dzielnica',
             ))
-            ->add('cardNumber', 'column', array(
-                'label' => 'Numer karty',
-            ))
             ->add('realizationStatus', 'column', array(
                 'label' => 'Status realizacji',
+                'order_by' => false,
                 'callback' => function ($value) {
                     return $this->visitService->getRealizationStatusesText($value);
                 }
             ))
             ->add('paymentStatus', 'column', array(
                 'label' => 'Status płatności',
+                'order_by' => false,
                 'callback' => function ($value) {
                     return $this->visitService->getPaymentStatusesText($value);
                 }
             ))
 
             ->add('actions', 'column', array(
-                'label' => 'Akcje'
+                'label' => 'Akcje',
+                'order_by' => false
             ))
         ;
     }
