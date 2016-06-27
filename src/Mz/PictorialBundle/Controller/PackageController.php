@@ -2,13 +2,9 @@
 
 namespace Mz\PictorialBundle\Controller;
 
-use FOS\UserBundle\Model\UserManager;
 use Mz\PictorialBundle\Entity\Package;
-use Mz\PictorialBundle\Entity\User;
 use Mz\PictorialBundle\Form\PackageForm;
-use Mz\PictorialBundle\Form\UserForm;
 use Mz\PictorialBundle\Listing\PackageListing;
-use Mz\PictorialBundle\Listing\UserListing;
 use Mz\PictorialBundle\Service\PackageService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

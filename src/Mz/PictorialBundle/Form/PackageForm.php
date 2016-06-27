@@ -44,6 +44,7 @@ class PackageForm extends AbstractType
                     new Assert\NotBlank(),
                 )
             ))
+            //TODO: WAZNE WALIDACJA PRZY EDYCJI JAK SA WIZYTY JUZ
             ->add('visitsQuantity', 'integer', array(
                 'label' => 'Liczba wizyt',
                 'constraints' => array(
