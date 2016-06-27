@@ -135,7 +135,8 @@ class VisitForm extends AbstractType
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('p')
                             ->leftJoin('p.visits', 'v')
-
+                            ->groupBy('p.id')
+                            ->having('(p.visitsQuantity - COUNT(v.id)) > 0')
                         ;
                 },
                 'constraints' => array(
