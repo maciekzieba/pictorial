@@ -230,6 +230,7 @@ class VisitForm extends AbstractType
                 'class' => 'MzPictorialBundle:Category',
                 'property' => 'name',
                 'multiple' => true,
+                'expanded' => true,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
                         ->orderBy('c.name')
