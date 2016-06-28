@@ -26,13 +26,13 @@ class DashboardController extends Controller
         $visitsByRealizationStat = $this->reportService->getVisitsByRealizationStat();
         $visitsByRealizationStatChart = array();
         foreach ($visitsByRealizationStat as $row) {
-            $visitsByRealizationStatChart[] = array('label' => $row['name'], 'val' => intval($row['amount']));
+            $visitsByRealizationStatChart[] = array('label' => $row['name'], 'value' => intval($row['amount']));
         }
 
         $visitsByContactSourceStat = $this->reportService->getVisitsByContactSourceStat();
         $visitsByContactSourceStatChart = array();
         foreach ($visitsByContactSourceStat as $row) {
-            $visitsByContactSourceStatChart[] = array('label' => $row['name'], 'val' => intval($row['amount']));
+            $visitsByContactSourceStatChart[] = array('label' => $row['name'], 'value' => intval($row['amount']));
         }
 
         return array(
