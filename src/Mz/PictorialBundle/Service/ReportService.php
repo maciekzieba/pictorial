@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use JMS\DiExtraBundle\Annotation\Inject;
 use JMS\DiExtraBundle\Annotation\InjectParams;
 use JMS\DiExtraBundle\Annotation\Service;
+use Mz\PictorialBundle\Entity\Category;
 use Mz\PictorialBundle\Entity\Package;
 use Mz\PictorialBundle\Entity\Publication;
 use Mz\PictorialBundle\Entity\User;
@@ -122,7 +123,13 @@ class ReportService
             $activesheet->setCellValue('D'.$rowCursor, $visit->getDescription());
             $activesheet->setCellValue('E'.$rowCursor, $visit->getCity());
             $activesheet->setCellValue('F'.$rowCursor, $visit->getDistrict());
-            $activesheet->setCellValue('G'.$rowCursor, '');
+
+            $catArr = array();
+            /** @var Category $category */
+            foreach ($visit->getCategories() as $category) {
+                $catArr[] = $category->getName();
+            }
+            $activesheet->setCellValue('G'.$rowCursor, implode(', ', $catArr));
             $activesheet->setCellValue('H'.$rowCursor, $this->visitService->getContactSourcesText($visit->getContactSource()));
             $activesheet->setCellValue('I'.$rowCursor, $visit->getCardNumber());
             if ($visit->getPhotoOwner() instanceof User) {

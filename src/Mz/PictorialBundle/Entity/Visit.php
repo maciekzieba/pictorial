@@ -295,11 +295,57 @@ class Visit
     private $publications;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Mz\PictorialBundle\Entity\Category")
+     * @ORM\JoinTable(name="visit_has_category",
+     *      joinColumns={@ORM\JoinColumn(name="visit", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="category", referencedColumnName="id")}
+     *    )
+     */
+    private $categories;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->visits = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+    }
+
+    /**
+     * Add category
+     *
+     * @param \Mz\PictorialBundle\Entity\Category $category
+     *
+     * @return Visit
+     */
+    public function addCategory(\Mz\PictorialBundle\Entity\Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param \Mz\PictorialBundle\Entity\Category $category
+     */
+    public function removeCategory(\Mz\PictorialBundle\Entity\Category $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 
     /**

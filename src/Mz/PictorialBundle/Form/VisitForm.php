@@ -225,6 +225,20 @@ class VisitForm extends AbstractType
                     new Assert\NotBlank()
                 )
             ))
+            ->add('categories', 'entity', array(
+                'label' => 'Kategorie',
+                'class' => 'MzPictorialBundle:Category',
+                'property' => 'name',
+                'multiple' => true,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name')
+                        ;
+                },
+                'constraints' => array(
+
+                )
+            ))
         ;
 
         $packageEvent = function (FormEvent $event) {

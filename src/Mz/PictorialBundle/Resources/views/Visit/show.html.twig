@@ -25,6 +25,14 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-6">
+            <p>
+                <a href="{{ path('visit_edit', {id: visit.id}) }}" class="btn btn-success">Edytuj</a>
+            </p>
+
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -111,6 +119,16 @@
                                     <div class="form-group">
                                         <label class="control-label required">Data praw do zdjęć</label>
                                         <p>{{ visit.rightsDeadline|date('d/m/Y') }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Kategorie</label>
+                                        <p>
+                                            {% for category in  visit.categories %}
+                                            <span>{{ category.name }}</span>
+                                            {% endfor %}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
