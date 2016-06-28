@@ -12,6 +12,7 @@ use Mz\PictorialBundle\Entity\Publication;
 use Mz\PictorialBundle\Entity\User;
 use Mz\PictorialBundle\Entity\Visit;
 use Mz\PictorialBundle\Model\ReportClientFilter;
+use Mz\PictorialBundle\Model\ReportSettlementFilter;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -29,6 +30,9 @@ class ReportService
     /** @var VisitService */
     private $visitService;
 
+    /** @var PackageService */
+    private $packageService;
+
     /**
      * @var PublicationService
      */
@@ -45,17 +49,65 @@ class ReportService
      *     "em"                     = @Inject("doctrine.orm.entity_manager"),
      *     "visitService"           = @Inject("pictorial.visit"),
      *     "publicationService"     = @Inject("pictorial.publication"),
+     *     "packageService"         = @Inject("pictorial.package"),
      *     "excel"                  = @Inject("phpexcel"),
      *     "kernel"                 = @Inject("kernel")
      * })
      */
-    public function __construct(EntityManager $em, VisitService $visitService, PublicationService $publicationService, \Liuggio\ExcelBundle\Factory $excel, Kernel $kernel)
+    public function __construct(EntityManager $em, VisitService $visitService, PublicationService $publicationService, PackageService $packageService, \Liuggio\ExcelBundle\Factory $excel, Kernel $kernel)
     {
         $this->em = $em;
         $this->visitService = $visitService;
         $this->excel = $excel;
         $this->kernel = $kernel;
         $this->publicationService = $publicationService;
+        $this->packageService = $packageService;
+    }
+
+    /**
+     * @param ReportSettlementFilter $filters
+     * @return array
+     */
+    public function getVisitsToSettlementReport(ReportSettlementFilter $filters)
+    {
+        $builder = $this->em->createQueryBuilder();
+        $builder->select('v, p')
+            ->from('MzPictorialBundle:Visit', 'v')
+            ->innerJoin('v.package', 'p')
+            ->orderBy('v.visitDate', 'DESC')
+            ->where('v.scountingOwner = :user OR v.photoOwner = :user OR v.interviewOwner = :user OR v.postproductionOwner = :user OR v.editingOwner = :user OR v.provisionOwner = :user')
+                ->setParameter('user', $filters->getUser()->getId());
+
+        if ($filters->getDateFrom() instanceof \DateTime) {
+            $builder->andWhere('v.visitDate >= :dateFrom')->setParameter('dateFrom', $filters->getDateFrom());
+        }
+        if ($filters->getDateTo() instanceof \DateTime) {
+            $builder->andWhere('v.visitDate <= :dateTo')->setParameter('dateTo', $filters->getDateTo());
+        }
+
+        $visits = $builder->getQuery()->getResult();
+        $result = array(
+            'visits' => array(),
+            'totalNet' => 0.00,
+            'totalGross' => 0.00
+        );
+        /** @var Visit $visit */
+        foreach ($visits as $visit) {
+            $paymentNet = $this->visitService->calculateUserVisitPayment($visit, $filters->getUser());
+            $result['visits'][] = array(
+                'number' => $visit->getNumber(),
+                'visitDate' => $visit->getVisitDate(),
+                'externalsCosts' => $visit->getExternalsCosts(),
+                'realizationStatus' => $this->visitService->getRealizationStatusesText($visit->getRealizationStatus()),
+                'paymentStatus' => $this->visitService->getPaymentStatusesText($visit->getPaymentStatus()),
+                'packageStatus' => $this->packageService->getStatusText($visit->getPackage()->getStatus()),
+                'package' => $visit->getPackage(),
+                'payment' => $paymentNet
+            );
+            $result['totalNet'] += $paymentNet;
+            $result['totalGross'] += ($paymentNet + ($paymentNet * 0.23));
+        }
+        return $result;
     }
 
     /**

@@ -62,6 +62,35 @@ class VisitService
     }
 
     /**
+     * @param Visit $visit
+     * @param User $user
+     * @return float
+     */
+    public function calculateUserVisitPayment(Visit $visit, User $user)
+    {
+        $payment = 0.00;
+        if ($visit->getScountingOwner()->getId() == $user->getId()) {
+            $payment += $visit->getPriceNetScouting();
+        }
+        if ($visit->getPhotoOwner()->getId() == $user->getId()) {
+            $payment += $visit->getPriceNetPhoto();
+        }
+        if ($visit->getPostproductionOwner()->getId() == $user->getId()) {
+            $payment += $visit->getPriceNetPostproduction();
+        }
+        if ($visit->getInterviewOwner()->getId() == $user->getId()) {
+            $payment += $visit->getPriceNetInterview();
+        }
+        if ($visit->getEditingOwner()->getId() == $user->getId()) {
+            $payment += $visit->getPriceNetEditing();
+        }
+        if ($visit->getProvisionOwner()->getId() == $user->getId()) {
+            $payment += $visit->getPriceNetProvision();
+        }
+        return $payment;
+    }
+
+    /**
      * @return float
      */
     public function getDefaultScountingShare()

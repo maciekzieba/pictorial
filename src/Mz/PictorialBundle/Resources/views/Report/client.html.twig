@@ -14,9 +14,14 @@
 {% block body_content %}
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header"><i class="fa fa-signal fa-fw"></i>Raport z wizyt</h1>
+        <h1 class="page-header"><i class="fa fa-signal fa-fw"></i>Raporty</h1>
     </div>
 </div>
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{{ path('report_client') }}">Raport z wizyt</a></li>
+    <li role="presentation"><a href="{{ path('report_settlement') }}">Raport rozliczeń</a></li>
+</ul>
+<br>
 <div class="row">
     <div class="col-md-10">
         {{ form_start(form, {action: path('report_client') , attr: {novalidate: 'novalidate'} }) }}

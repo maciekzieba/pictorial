@@ -3,7 +3,9 @@
 namespace Mz\PictorialBundle\Controller;
 
 use Mz\PictorialBundle\Form\ReportClientFilterForm;
+use Mz\PictorialBundle\Form\ReportSettlementFilterForm;
 use Mz\PictorialBundle\Model\ReportClientFilter;
+use Mz\PictorialBundle\Model\ReportSettlementFilter;
 use Mz\PictorialBundle\Service\PackageService;
 use Mz\PictorialBundle\Service\ReportService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -48,4 +50,32 @@ class ReportController extends Controller
             'form' => $form->createView()
         );
     }
+
+    /**
+     * @Route("/report/settlement", name="report_settlement")
+     * @Template()
+     */
+    public function settlementAction(Request $request)
+    {
+        $user = $this->getUser();
+        $filters = new ReportSettlementFilter();
+        $form = $this->createForm(new ReportSettlementFilterForm($user), $filters);
+        $form->handleRequest($request);
+        $data = array();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $data = $this->reportService->getVisitsToSettlementReport($filters);
+
+
+            } else {
+
+            }
+        }
+
+        return array(
+            'form' => $form->createView(),
+            'data' => $data
+        );
+    }
+
 }
