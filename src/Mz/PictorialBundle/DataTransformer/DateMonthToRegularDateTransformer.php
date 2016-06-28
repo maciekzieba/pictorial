@@ -26,7 +26,6 @@ class DateMonthToRegularDateTransformer implements DataTransformerInterface
         if (isset($parts[0])) {
             unset($parts[0]);
         }
-
         return implode($this->separator, $parts);
     }
 
