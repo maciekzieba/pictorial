@@ -98,6 +98,8 @@
                     <li>
                         <a href="{{ path('category_list') }}"><i class="fa fa-tags fa-fw"></i> Kategorie</a>
                     </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
                     <li>
                         <a href="{{ path('user_list') }}"><i class="fa fa-users fa-fw"></i> Użytkownicy</a>
                     </li>
