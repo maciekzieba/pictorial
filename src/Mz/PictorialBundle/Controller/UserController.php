@@ -4,6 +4,7 @@ namespace Mz\PictorialBundle\Controller;
 
 use FOS\UserBundle\Model\UserManager;
 use Mz\PictorialBundle\Entity\User;
+use Mz\PictorialBundle\Form\PasswordForm;
 use Mz\PictorialBundle\Form\UserForm;
 use Mz\PictorialBundle\Listing\UserListing;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -66,6 +67,30 @@ class UserController extends Controller
                 $this->userManager->updateUser($user);
                 $this->addFlash('success', 'Użytkownik został dodanay');
                 return $this->redirect($this->generateUrl('user_list', array()));
+            } else {
+
+            }
+        }
+
+        return array(
+            'form' => $form->createView()
+        );
+    }
+
+    /**
+     * @Route("/password", name="password")
+     * @Template()
+     */
+    public function passwordAction(Request $request)
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(new PasswordForm(), $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->userManager->updateUser($user);
+                $this->addFlash('success', 'Hasło zostało zmienione');
+                return $this->redirect($this->generateUrl('dashboard', array()));
             } else {
 
             }
