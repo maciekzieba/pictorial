@@ -22,6 +22,14 @@ class PublicationService
      */
     private $em;
 
+    protected $types = array(
+        'facebook' => 'Facebook',
+        'ikeafamily' => 'IKEA FAMILY',
+        'pixieset' => 'Pixieset',
+        'other' => 'Inne',
+    );
+
+
     /**
      * @InjectParams({
      *     "em"                     = @Inject("doctrine.orm.entity_manager")
@@ -30,6 +38,26 @@ class PublicationService
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
+    }
+
+    /**
+     * @param $type
+     * @return string
+     */
+    public function getTypeText($type)
+    {
+        if (isset($this->types[$type])) {
+            return $this->types[$type];
+        }
+        return "";
+    }
+
+    /**
+     * @return array
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 
     /**

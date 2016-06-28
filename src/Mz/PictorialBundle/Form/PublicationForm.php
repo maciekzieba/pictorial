@@ -4,6 +4,7 @@ namespace Mz\PictorialBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Mz\PictorialBundle\Entity\User;
+use Mz\PictorialBundle\Service\PublicationService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -14,6 +15,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class PublicationForm extends AbstractType
 {
+
+    /** @var  PublicationService */
+    protected $publicationService;
+
+    /**
+     * @param PublicationService $publicationService
+     */
+    public function __construct(PublicationService $publicationService)
+    {
+        $this->publicationService = $publicationService;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -29,12 +41,7 @@ class PublicationForm extends AbstractType
                 )
             ))
             ->add('type', 'choice', array(
-                'choices' => array(
-                    'Facebook' => 'Facebook',
-                    'IKEA FAMILY' => 'IKEA FAMILY',
-                    'Pixieset' => 'Pixieset',
-                    'Other' => 'Other'
-                ),
+                'choices' => $this->publicationService->getTypes(),
                 'label' => 'Typ',
                 'constraints' => array(
                     new Assert\NotBlank(),

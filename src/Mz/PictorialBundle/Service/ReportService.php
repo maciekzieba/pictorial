@@ -7,6 +7,7 @@ use JMS\DiExtraBundle\Annotation\Inject;
 use JMS\DiExtraBundle\Annotation\InjectParams;
 use JMS\DiExtraBundle\Annotation\Service;
 use Mz\PictorialBundle\Entity\Package;
+use Mz\PictorialBundle\Entity\Publication;
 use Mz\PictorialBundle\Entity\User;
 use Mz\PictorialBundle\Entity\Visit;
 use Mz\PictorialBundle\Model\ReportClientFilter;
@@ -27,6 +28,11 @@ class ReportService
     /** @var VisitService */
     private $visitService;
 
+    /**
+     * @var PublicationService
+     */
+    protected $publicationService;
+
     /** @var  \Liuggio\ExcelBundle\Factory */
     protected $excel;
 
@@ -37,16 +43,18 @@ class ReportService
      * @InjectParams({
      *     "em"                     = @Inject("doctrine.orm.entity_manager"),
      *     "visitService"           = @Inject("pictorial.visit"),
+     *     "publicationService"     = @Inject("pictorial.publication"),
      *     "excel"                  = @Inject("phpexcel"),
      *     "kernel"                 = @Inject("kernel")
      * })
      */
-    public function __construct(EntityManager $em, VisitService $visitService, \Liuggio\ExcelBundle\Factory $excel, Kernel $kernel)
+    public function __construct(EntityManager $em, VisitService $visitService, PublicationService $publicationService, \Liuggio\ExcelBundle\Factory $excel, Kernel $kernel)
     {
         $this->em = $em;
         $this->visitService = $visitService;
         $this->excel = $excel;
         $this->kernel = $kernel;
+        $this->publicationService = $publicationService;
     }
 
     /**
@@ -87,15 +95,26 @@ class ReportService
         $activesheet = $phpExcel->getActiveSheet();
 
         $activesheet->setCellValue('C2',date("d.m.Y"));
-
         $startingPosition = 4;
+
+
+        $lastColumn = "L";
+        $publicationTypesColumnMap = array();
+        foreach ($this->publicationService->getTypes() as $type => $typeName) {
+            $lastColumn++;
+            $publicationTypesColumnMap[$type] = $lastColumn;
+            $activesheet->duplicateStyle($activesheet->getStyle("L".($startingPosition-1)), $lastColumn.($startingPosition-1).":".$lastColumn.($startingPosition-1));
+            $activesheet->setCellValue($lastColumn.($startingPosition-1), $typeName);
+            $activesheet->getColumnDimension($lastColumn)->setWidth(50);
+        }
+
         $data = $this->getVisitsToClientReport($filters);
         $rowCursor = $startingPosition;
         /** @var Visit $visit */
         foreach ($data as $visit) {
             if ($rowCursor > $startingPosition) {
-                $activesheet->duplicateStyle($activesheet->getStyle("B$startingPosition"), "A$rowCursor:L$rowCursor");
-                $activesheet->duplicateStyle($activesheet->getStyle("C$startingPosition"), "C$rowCursor:C$rowCursor");
+                $activesheet->duplicateStyle($activesheet->getStyle("B$startingPosition"), "A$rowCursor:$lastColumn".$rowCursor);
+                $activesheet->duplicateStyle($activesheet->getStyle("C$startingPosition"), "C$rowCursor:C".$rowCursor);
             }
             $activesheet->setCellValue('A'.$rowCursor, $visit->getNumber()."/".$visit->getPackage()->getId());
             $activesheet->setCellValue('B'.$rowCursor, $visit->getLpId());
@@ -153,6 +172,18 @@ class ReportService
                     break;
             }
             $activesheet->setCellValue('L'.$rowCursor, $visit->getDistrict());
+            /** @var Publication $publication */
+            $publicationArray = array();
+            foreach ($visit->getPublications() as $publication) {
+                $publicationArray[$publication->getType()][] = $publication->getUrl();
+            }
+
+            foreach ($publicationArray as $type => $val) {
+                if (isset($publicationTypesColumnMap[$type])) {
+                    $activesheet->setCellValue($publicationTypesColumnMap[$type].$rowCursor, implode(', ', $val));
+                }
+            }
+
             $rowCursor++;
         }
 
