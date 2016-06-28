@@ -5,3 +5,11 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         arguments:
             container: "@service_container"
+
+
+    packageVisits.validator:
+            class: Mz\PictorialBundle\Validator\Constraints\PackageVisitsValidator
+            arguments:
+                em: "@doctrine.orm.entity_manager"
+            tags:
+                - { name: validator.constraint_validator, alias: packageVisits.validator }
