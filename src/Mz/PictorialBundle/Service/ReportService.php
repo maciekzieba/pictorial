@@ -95,6 +95,7 @@ class ReportService
         foreach ($visits as $visit) {
             $paymentNet = $this->visitService->calculateUserVisitPayment($visit, $filters->getUser());
             $result['visits'][] = array(
+                'id' => $visit->getId(),
                 'number' => $visit->getNumber(),
                 'visitDate' => $visit->getVisitDate(),
                 'externalsCosts' => $visit->getExternalsCosts(),

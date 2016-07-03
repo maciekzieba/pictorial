@@ -424,6 +424,6 @@ class Package
      */
     public function getFullName()
     {
-        return $this->id." ".$this->validityDate->format("m/Y")." (Pozostało:".($this->getVisitsLeft()).")";
+        return $this->id." ".$this->validityDate->format("m/y")." (".$this->getVisitsLeft()."/".$this->visitsQuantity.")";
     }
 }

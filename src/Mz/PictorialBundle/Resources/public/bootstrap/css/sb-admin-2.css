@@ -17,6 +17,10 @@ input[type='checkbox'] {
     margin-left: -15px!important;
 }
 
+table.dataTable thead .sorting_asc {
+    background: none!important;
+}
+
 #wrapper {
     width: 100%;
 }

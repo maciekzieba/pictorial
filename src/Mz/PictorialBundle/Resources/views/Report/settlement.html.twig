@@ -37,10 +37,12 @@
 {%  if data|length %}
     <br>
 <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-6">
         Suma netto: <strong>{{ data.totalNet|number_format(2, ',', ' ') }} zł</strong>
     </div>
-    <div class="col-md-2">
+</div>
+<div class="row">
+    <div class="col-md-6">
         Suma brutto (Vat 23%): <strong>{{ data.totalGross|number_format(2, ',', ' ') }} zł</strong>
     </div>
 </div>
@@ -63,7 +65,7 @@
                 <tbody>
                 {% for visit in data.visits %}
                     <tr>
-                        <td>{{ visit.number }}</td>
+                        <td><a href="{{ path('visit_show', {id: visit.id}) }}">{{ visit.number }}</a></td>
                         <td>{{ visit.visitDate|date('d/m/Y') }}</td>
                         <td>{{ visit.externalsCosts|number_format(2, ',', ' ') }} zł</td>
                         <td>{{ visit.realizationStatus }}</td>
