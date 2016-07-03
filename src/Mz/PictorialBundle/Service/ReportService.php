@@ -143,7 +143,7 @@ class ReportService
      */
     public function renderClientReport(ReportClientFilter $filters)
     {
-        $phpExcel = $this->excel->createPHPExcelObject($this->kernel->locateResource('@MzPictorialBundle/Resources/templates/clientReportTemplate.xlsx'));
+        $phpExcel = $this->excel->createPHPExcelObject($this->kernel->locateResource('@MzPictorialBundle/Resources/templates/clientReportTemplate.xls'));
         $phpExcel->setActiveSheetIndex(0);
         $activesheet = $phpExcel->getActiveSheet();
 
@@ -247,8 +247,8 @@ class ReportService
         }
 
 
-        $fileName = 'Pictorial raport z wizyt '.date("d_m_Y").'.xlsx';
-        $writer = $this->excel->createWriter($phpExcel, 'Excel2007');
+        $fileName = 'PICTORIAL_raport_wizyt_'.date("Ymd").'.xls';
+        $writer = $this->excel->createWriter($phpExcel, 'Excel5');
         $response = $this->excel->createStreamedResponse($writer);
         $dispositionHeader = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
