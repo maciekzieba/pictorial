@@ -21,6 +21,37 @@
             {{ render_listing(listing) }}
         </div>
     </div>
+
+    <script type="text/javascript">
+        var refreshCallback = function() {
+            $('.editable').jinplace({
+                placeholder: "[---]",
+                inputClass: "inline-input",
+                submitFunction: function(opts, value) {
+                    return $.ajax(Routing.generate('visit_update_field'), {
+                        type: "post",
+                        data: {
+                            id: opts.object,
+                            field: opts.attribute,
+                            value: value
+                        },
+                        dataType: 'html'
+                    })
+                    .done(function(data) {
+                        return data;
+                    })
+                    .fail(function(data) {
+                        alert(data.responseText);
+                        return undefined;
+                    });
+                }
+            });
+        };
+
+        var visitListing = table{{ listing.name }};
+        visitListing.on('draw', refreshCallback);
+        $(document).ready(refreshCallback);
+    </script
 {% endblock body_content %}
 
 
@@ -41,8 +72,59 @@
 {% endblock %}
 
 {% block _column_visitDate %}
-    <td>{{ value|date("d-m-Y") }}</td>
+    <td>
+        {{ value|date('d/m/Y') }}
+    </td>
 {% endblock %}
+
+{% block _column_cardNumber %}
+    <td>
+        <span class="editable" data-object="{{ row.id }}" data-attribute="cardNumber">{{ value }}</span>
+    </td>
+{% endblock %}
+
+{% block _column_firstname %}
+    <td>
+        <span class="editable" data-object="{{ row.id }}" data-attribute="firstname">{{ value }}</span>
+    </td>
+{% endblock %}
+
+{% block _column_lastname %}
+    <td>
+        <span class="editable" data-object="{{ row.id }}" data-attribute="lastname">{{ value }}</span>
+    </td>
+{% endblock %}
+
+{% block _column_city %}
+    <td>
+        <span class="editable" data-object="{{ row.id }}" data-attribute="city">{{ value }}</span>
+    </td>
+{% endblock %}
+
+{% block _column_district %}
+    <td>
+        <span class="editable" data-object="{{ row.id }}" data-attribute="district">{{ value }}</span>
+    </td>
+{% endblock %}
+
+{% block _column_number %}
+    <td>
+        <span class="editable" data-object="{{ row.id }}" data-attribute="number">{{ value }}</span>
+    </td>
+{% endblock %}
+
+{% block _column_realizationStatus %}
+    <td>
+        <span class="editable" data-type="select" data-data='[["appointed","Umówiona"],["realized","Zrealizowana"],["passed","Zdana"],["paid","Opublikowana"],["cancelled","Anulowana"]]' data-object="{{ row.id }}" data-attribute="realizationStatus">{{ value }}</span>
+    </td>
+{% endblock %}
+
+{% block _column_paymentStatus %}
+    <td>
+        <span class="editable" data-type="select" data-data='[["realized","W realizacji"],["invoiced","Zafakturowana"],["paid","Rozliczona"],["delayed","Zaległa"]]' data-object="{{ row.id }}" data-attribute="paymentStatus">{{ value }}</span>
+    </td>
+{% endblock %}
+
 
 {% block listing_filters %}
     <div id="listing_filters_{{ listing.name }}" class="">

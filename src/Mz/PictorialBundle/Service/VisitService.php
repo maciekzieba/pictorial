@@ -279,6 +279,62 @@ class VisitService
         return $builder->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * @param Visit $visit
+     * @param $field
+     * @param $value
+     * @throws \Exception
+     */
+    public function updateVisitField(Visit $visit, $field, $value)
+    {
+        $newValue = $value;
+        switch ($field) {
+            case 'cardNumber':
+                $visit->setCardNumber($value);
+                break;
+            case 'firstname':
+                $visit->setFirstname($value);
+                break;
+            case 'lastname':
+                $visit->setLastname($value);
+                break;
+            case 'city':
+                $visit->setCity($value);
+                break;
+            case 'district':
+                $visit->setDistrict($value);
+                break;
+            case 'number':
+                if (strlen($value)) {
+                    $visit->setNumber($value);
+                } else {
+                    throw new \Exception('Numer nie może być pusty.');
+                }
+                break;
+            case 'realizationStatus':
+                if (isset($this->realizationStatuses[$value])) {
+                    $visit->setRealizationStatus($value);
+                    $newValue = $this->realizationStatuses[$value];
+                } else {
+                    throw new \Exception('Niepoprawny status realizacji.');
+                }
+                break;
+            case 'paymentStatus':
+                if (isset($this->paymentStatuses[$value])) {
+                    $visit->setPaymentStatus($value);
+                    $newValue = $this->paymentStatuses[$value];
+                } else {
+                    throw new \Exception('Niepoprawny status płatności.');
+                }
+                break;
+            default:
+                throw new \Exception("Wrong field name.");
+                break;
+        }
+        $this->saveVisit($visit);
+        return $newValue;
+    }
+
 
     /**
      * @param Visit $visit
