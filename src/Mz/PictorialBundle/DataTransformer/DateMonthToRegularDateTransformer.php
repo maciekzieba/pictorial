@@ -18,7 +18,7 @@ class DateMonthToRegularDateTransformer implements DataTransformerInterface
 
     /**
      * @param mixed $value
-     * @return bool
+     * @return string
      */
     public function transform($value)
     {
@@ -37,13 +37,14 @@ class DateMonthToRegularDateTransformer implements DataTransformerInterface
     public function reverseTransform($value)
     {
         $parts = explode($this->separator, $value);
-
+        if  (count($parts) < 2) {
+            return "";
+        }
         if (count($parts) < 3) {
             $newParts = array('01');
             $newParts = array_merge($newParts, $parts);
             return implode($this->separator, $newParts);
         }
-
         return implode($this->separator, $parts);
     }
 

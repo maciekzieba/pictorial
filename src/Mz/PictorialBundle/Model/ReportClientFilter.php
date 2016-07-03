@@ -42,7 +42,7 @@ class ReportClientFilter
     /**
      * @param \DateTime $packageDateFrom
      */
-    public function setPackageDateFrom(\DateTime $packageDateFrom)
+    public function setPackageDateFrom(\DateTime $packageDateFrom = null)
     {
         $this->packageDateFrom = $packageDateFrom;
     }
@@ -58,7 +58,7 @@ class ReportClientFilter
     /**
      * @param \DateTime $packageDateTo
      */
-    public function setPackageDateTo(\DateTime $packageDateTo)
+    public function setPackageDateTo(\DateTime $packageDateTo = null)
     {
         $this->packageDateTo = $packageDateTo;
     }
