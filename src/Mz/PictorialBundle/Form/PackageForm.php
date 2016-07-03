@@ -54,6 +54,7 @@ class PackageForm extends AbstractType
             ))
             ->add('priceNet', 'money', array(
                 'label' => 'Cena pakietu netto',
+                'currency' => 'PLN',
                 'constraints' => array(
                     new Assert\NotBlank()
                 )
@@ -73,6 +74,7 @@ class PackageForm extends AbstractType
             ))
             ->add('invoiceValueNet', 'money', array(
                 'label' => 'Kwota netto faktury',
+                'currency' => 'PLN',
                 'constraints' => array(
 
                 )

@@ -132,6 +132,7 @@ class VisitForm extends AbstractType
             ))
             ->add('externalsCosts', 'money', array(
                 'label' => 'Koszty zewnętrzne',
+                'currency' => 'PLN',
                 'constraints' => array(
                 )
             ))
