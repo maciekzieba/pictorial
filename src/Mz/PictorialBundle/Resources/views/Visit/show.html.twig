@@ -125,9 +125,10 @@
                                     <div class="form-group">
                                         <label class="control-label required">Kategorie</label>
                                         <p>
-                                            {% for category in  visit.categories %}
-                                            <span>{{ category.name }}</span>
-                                            {% endfor %}
+                                            {% spaceless %}
+                                            {% set delimiter = '' %}
+                                            {% for category in  visit.categories %}{{ delimiter }}{{ category.name }}{% set delimiter = ', ' %}{% endfor %}
+                                            {% endspaceless %}
                                         </p>
                                     </div>
                                 </div>
