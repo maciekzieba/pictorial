@@ -160,6 +160,7 @@ class VisitListing extends AbstractType
     public function setDefaultOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
+            'page_length' => 100,
             'query_builder' => function (QueryBuilder $builder) {
                 $builder->select('v, p, po')
                     ->from('MzPictorialBundle:Visit', 'v')
