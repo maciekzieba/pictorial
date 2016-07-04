@@ -1,0 +1,10 @@
+.editable {
+    border-bottom: dashed 1px #0088cc;
+    color: #428bca;
+    cursor: pointer;
+
+}
+
+.inline-input {
+    width: 100px;
+}

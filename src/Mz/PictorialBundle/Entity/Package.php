@@ -4,12 +4,14 @@ namespace Mz\PictorialBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Mz\PictorialBundle\Validator\Constraints\PackageVisits;
 
 /**
  * Package
  *
  * @ORM\Table(name="package", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="fk_package_user1_idx", columns={"updated_by"}), @ORM\Index(name="fk_package_user2_idx", columns={"created_by"})})
  * @ORM\Entity
+ * @PackageVisits()
  */
 class Package
 {
@@ -422,6 +424,6 @@ class Package
      */
     public function getFullName()
     {
-        return $this->id." ".$this->validityDate->format("m/Y")." (Pozostało:".($this->getVisitsLeft()).")";
+        return $this->id." ".$this->validityDate->format("m/y")." (".$this->getVisitsLeft()."/".$this->visitsQuantity.")";
     }
 }

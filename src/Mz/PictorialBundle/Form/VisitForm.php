@@ -132,6 +132,7 @@ class VisitForm extends AbstractType
             ))
             ->add('externalsCosts', 'money', array(
                 'label' => 'Koszty zewnętrzne',
+                'currency' => 'PLN',
                 'constraints' => array(
                 )
             ))
@@ -223,6 +224,21 @@ class VisitForm extends AbstractType
                 },
                 'constraints' => array(
                     new Assert\NotBlank()
+                )
+            ))
+            ->add('categories', 'entity', array(
+                'label' => 'Kategorie',
+                'class' => 'MzPictorialBundle:Category',
+                'property' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name')
+                        ;
+                },
+                'constraints' => array(
+
                 )
             ))
         ;

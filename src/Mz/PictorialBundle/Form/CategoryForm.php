@@ -13,19 +13,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-class PublicationForm extends AbstractType
+class CategoryForm extends AbstractType
 {
-
-    /** @var  PublicationService */
-    protected $publicationService;
-
-    /**
-     * @param PublicationService $publicationService
-     */
-    public function __construct(PublicationService $publicationService)
-    {
-        $this->publicationService = $publicationService;
-    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -34,15 +23,8 @@ class PublicationForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('url', 'url', array(
-                'label' => 'URL',
-                'constraints' => array(
-                    new Assert\NotBlank(),
-                )
-            ))
-            ->add('type', 'choice', array(
-                'choices' => $this->publicationService->getTypes(),
-                'label' => 'Typ',
+            ->add('name', 'text', array(
+                'label' => 'Nazwa',
                 'constraints' => array(
                     new Assert\NotBlank(),
                 )
@@ -58,7 +40,7 @@ class PublicationForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Mz\PictorialBundle\Entity\Publication'
+            'data_class' => 'Mz\PictorialBundle\Entity\Category'
         ));
     }
 
@@ -68,7 +50,7 @@ class PublicationForm extends AbstractType
      */
     public function getName()
     {
-        return 'publication';
+        return 'category';
     }
 
 }

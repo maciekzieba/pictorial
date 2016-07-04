@@ -3,7 +3,7 @@
 {% block body_content %}
     <div class="row">
         <div class="col-md-4">
-            <h1 class="page-header"><i class="fa fa-camera-retro fa-fw"></i>Edytuj wizytę: {{ visit.id }}</h1>
+            <h1 class="page-header"><i class="fa fa-camera-retro fa-fw"></i>Edytuj wizytę: {{ visit.number }}</h1>
         </div>
     </div>
     <div class="row">
@@ -33,6 +33,7 @@
                 <div class="col-md-6">
                     <p>
                         <button type="submit" class="btn btn-success">Zapisz</button>
+                        <a href="{{ path('visit_show', {id: visit.id}) }}" class="btn btn-primary">Pokaż</a>
                         <a href="{{ path('visit_list') }}" class="btn btn-default">Anuluj</a>
                     </p>
 
@@ -68,6 +69,12 @@
                                 <div class="col-md-6">
                                     {{ form_row(form.newsletter) }}
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{ form_row(form.categories) }}
+                                </div>
+
                             </div>
                         </div>
 
@@ -187,4 +194,9 @@
             {{ form_end(form) }}
         </div>
     </div>
+    <script type="text/javascript">
+        $('input.date').datepicker({
+            "dateFormat": "dd/mm/yy"
+        });
+    </script>
 {% endblock body_content %}

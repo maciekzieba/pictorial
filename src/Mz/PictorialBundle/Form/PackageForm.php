@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Mz\PictorialBundle\Entity\User;
 use Mz\PictorialBundle\Form\Type\DateMonthType;
 use Mz\PictorialBundle\Service\PackageService;
+use Mz\PictorialBundle\Validator\Constraints\PackageVisits;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -44,7 +45,6 @@ class PackageForm extends AbstractType
                     new Assert\NotBlank(),
                 )
             ))
-            //TODO: WAZNE WALIDACJA PRZY EDYCJI JAK SA WIZYTY JUZ
             ->add('visitsQuantity', 'integer', array(
                 'label' => 'Liczba wizyt',
                 'constraints' => array(
@@ -54,6 +54,7 @@ class PackageForm extends AbstractType
             ))
             ->add('priceNet', 'money', array(
                 'label' => 'Cena pakietu netto',
+                'currency' => 'PLN',
                 'constraints' => array(
                     new Assert\NotBlank()
                 )
@@ -73,6 +74,7 @@ class PackageForm extends AbstractType
             ))
             ->add('invoiceValueNet', 'money', array(
                 'label' => 'Kwota netto faktury',
+                'currency' => 'PLN',
                 'constraints' => array(
 
                 )

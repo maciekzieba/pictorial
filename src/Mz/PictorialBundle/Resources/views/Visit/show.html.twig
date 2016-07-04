@@ -3,7 +3,7 @@
 {% block body_content %}
     <div class="row">
         <div class="col-md-4">
-            <h1 class="page-header"><i class="fa fa-camera-retro fa-fw"></i>Wizyta: {{ visit.id }}</h1>
+            <h1 class="page-header"><i class="fa fa-camera-retro fa-fw"></i>Wizyta: {{ visit.number }}</h1>
         </div>
     </div>
     <div class="row">
@@ -25,11 +25,19 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-6">
+            <p>
+                <a href="{{ path('visit_edit', {id: visit.id}) }}" class="btn btn-success">Edytuj</a>
+            </p>
+
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <ul class="nav nav-tabs">
-                        <li class=""><a href="#data" data-toggle="tab">Dane</a></li>
+                        <li class="active"><a href="#data" data-toggle="tab">Dane</a></li>
                         {% if is_granted('ROLE_ADMIN') %}
                             <li class=""><a href="#settlement" data-toggle="tab">Rozliczenia</a></li>
                             <li class=""><a href="#invoices" data-toggle="tab">Faktury</a></li>
@@ -38,7 +46,7 @@
                     </ul>
 
                     <div class="tab-content">
-                        <div class="tab-pane" id="data">
+                        <div class="tab-pane active" id="data">
                             <br/>
                             <div class="row">
                                 <div class="col-md-3">
@@ -111,6 +119,17 @@
                                     <div class="form-group">
                                         <label class="control-label required">Data praw do zdjęć</label>
                                         <p>{{ visit.rightsDeadline|date('d/m/Y') }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Kategorie</label>
+                                        <p>
+                                            {% spaceless %}
+                                            {% set delimiter = '' %}
+                                            {% for category in  visit.categories %}{{ delimiter }}{{ category.name }}{% set delimiter = ', ' %}{% endfor %}
+                                            {% endspaceless %}
+                                        </p>
                                     </div>
                                 </div>
                             </div>

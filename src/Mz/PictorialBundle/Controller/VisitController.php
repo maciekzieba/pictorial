@@ -2,21 +2,16 @@
 
 namespace Mz\PictorialBundle\Controller;
 
-use FOS\UserBundle\Model\UserManager;
-use Mz\PictorialBundle\Entity\User;
 use Mz\PictorialBundle\Entity\Visit;
-use Mz\PictorialBundle\Form\UserForm;
 use Mz\PictorialBundle\Form\VisitForm;
-use Mz\PictorialBundle\Listing\PackageListing;
-use Mz\PictorialBundle\Listing\UserListing;
 use Mz\PictorialBundle\Listing\VisitListing;
-use Mz\PictorialBundle\Service\PackageService;
 use Mz\PictorialBundle\Service\VisitService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use JMS\DiExtraBundle\Annotation as DI;
+use Symfony\Component\HttpFoundation\Response;
 
 class VisitController extends Controller
 {
@@ -38,6 +33,27 @@ class VisitController extends Controller
         );
     }
 
+
+    /**
+     * @Route("/visit/update-field", name="visit_update_field", options={"expose"=true})
+     */
+    public function updateFieldAction(Request $request)
+    {
+        $id = $request->request->getInt('id');
+        $value = $request->request->get('value', null);
+        $field = $request->request->get('field', null);
+        if ($id > 0 && $value !== null && $field !== null) {
+            try {
+                $visit = $this->visitService->demandVisit($id);
+                $newValue = $this->visitService->updateVisitField($visit, $field, $value);
+                return new Response($newValue);
+            } catch (\Exception $e) {
+                return new Response($e->getMessage(), 500);
+            }
+
+        }
+        return new Response("Wrong input data.", 500);
+    }
 
     /**
      * @Route("/admin/visit/list", name="visit_list")

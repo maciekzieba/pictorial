@@ -44,7 +44,7 @@ class PublicationController extends Controller
         $visit = $this->visitService->demandVisit($visitId);
         $publication = new Publication();
         $publication->setVisit($visit);
-        $form = $this->createForm(new PublicationForm(), $publication);
+        $form = $this->createForm(new PublicationForm($this->publicationService), $publication);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
@@ -71,7 +71,7 @@ class PublicationController extends Controller
     {
         $visit = $this->visitService->demandVisit($visitId);
         $publication = $this->publicationService->demandPublication($id);
-        $form = $this->createForm(new PublicationForm(), $publication);
+        $form = $this->createForm(new PublicationForm($this->publicationService), $publication);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {

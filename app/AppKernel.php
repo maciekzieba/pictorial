@@ -30,7 +30,7 @@ class AppKernel extends Kernel
             //Others
             new Mz\PictorialBundle\MzPictorialBundle(),
             new PawelLen\DataTablesListing\DataTablesListingBundle(),
-
+            new Liuggio\ExcelBundle\LiuggioExcelBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

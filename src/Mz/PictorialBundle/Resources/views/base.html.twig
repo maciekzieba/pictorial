@@ -19,6 +19,7 @@
     <link href="{{ asset('/bundles/mzpictorial/bootstrap/css/sb-admin-2.css') }}" rel="stylesheet">
     <link href="{{ asset('/bundles/mzpictorial/bootstrap/css/morris.css') }}" rel="stylesheet">
     <link href="{{ asset('/bundles/mzpictorial/bootstrap/css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/bundles/mzpictorial/inlineedit/inlineedit.css') }}" rel="stylesheet">
     {% block stylesheets %}{% endblock %}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -35,6 +36,7 @@
     <script src="{{ asset('/bundles/mzpictorial/bootstrap/js/sb-admin-2.js') }}"></script>
     <script src="{{ asset('/bundles/mzpictorial/bootstrap/js/raphael-min.js') }}"></script>
     <script src="{{ asset('/bundles/mzpictorial/bootstrap/js/morris.min.js') }}"></script>
+    <script src="{{ asset('/bundles/mzpictorial/inlineedit/inlineedit.js') }}"></script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
 
@@ -66,7 +68,7 @@
                     <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Zmiana hasła</a>
+                    <li><a href="{{ path('password') }}"><i class="fa fa-key fa-fw"></i> Zmiana hasła</a>
                     </li>
                     <li class="divider"></li>
                     <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</a>
@@ -85,6 +87,9 @@
                     <li>
                         <a href="{{ path('dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
+                    <li>
+                        <a href="{{ path('report_client') }}"><i class="fa fa-signal fa-fw"></i> Raporty</a>
+                    </li>
                     {% if is_granted('ROLE_ADMIN') %}
                     <li>
                         <a href="{{ path('visit_list') }}"><i class="fa fa-camera-retro fa-fw"></i> Wizyty</a>
@@ -92,6 +97,11 @@
                     <li>
                         <a href="{{ path('package_list') }}"><i class="fa fa-suitcase fa-fw"></i> Pakiety</a>
                     </li>
+                    <li>
+                        <a href="{{ path('category_list') }}"><i class="fa fa-tags fa-fw"></i> Kategorie</a>
+                    </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
                     <li>
                         <a href="{{ path('user_list') }}"><i class="fa fa-users fa-fw"></i> Użytkownicy</a>
                     </li>

@@ -145,13 +145,14 @@
 
 
 {% block listing_table %}
-<div class="table-responsive">
-    <table id="listing_table_{{ listing.name }}" class="table table-striped" data-ajaxsource="{{ listing.source }}">
+
+
+    <table id="listing_table_{{ listing.name }}" class="table table-hover table-condensed table-bordered" data-ajaxsource="{{ listing.source }}">
         {{ block('listing_head') }}
         {{ block('listing_body') }}
         {{ block('listing_footer') }}
     </table>
-</div>
+
 {% endblock %}
 
 
@@ -167,7 +168,6 @@
         {% if listing.hasFilters %}
             {{ block('listing_filters') }}
         {% endif %}
-
         {{ block('listing_table') }}
 
         <script type="text/javascript">

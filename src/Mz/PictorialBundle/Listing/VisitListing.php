@@ -111,7 +111,12 @@ class VisitListing extends AbstractType
             ))
             ->add('photoOwner', 'column', array(
                 'label' => 'Zdjęcia',
+                'order_by' => false,
                 'property' => 'photoOwner.fullName'
+            ))
+            ->add('cardNumber', 'column', array(
+                'label' => 'Numer karty',
+                'order_by' => false
             ))
             ->add('firstname', 'column', array(
                 'label' => 'Imię',
@@ -123,19 +128,21 @@ class VisitListing extends AbstractType
             ))
             ->add('city', 'column', array(
                 'label' => 'Miasto',
+                'order_by' => false,
             ))
             ->add('district', 'column', array(
                 'label' => 'Dzielnica',
+                'order_by' => false,
             ))
             ->add('realizationStatus', 'column', array(
-                'label' => 'Status realizacji',
+                'label' => 'Realizacja',
                 'order_by' => false,
                 'callback' => function ($value) {
                     return $this->visitService->getRealizationStatusesText($value);
                 }
             ))
             ->add('paymentStatus', 'column', array(
-                'label' => 'Status płatności',
+                'label' => 'Płatność',
                 'order_by' => false,
                 'callback' => function ($value) {
                     return $this->visitService->getPaymentStatusesText($value);
@@ -153,6 +160,7 @@ class VisitListing extends AbstractType
     public function setDefaultOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
+            'page_length' => 100,
             'query_builder' => function (QueryBuilder $builder) {
                 $builder->select('v, p, po')
                     ->from('MzPictorialBundle:Visit', 'v')
