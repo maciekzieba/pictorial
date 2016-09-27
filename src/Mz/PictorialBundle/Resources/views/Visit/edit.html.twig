@@ -1,0 +1,202 @@
+{% extends "MzPictorialBundle::base.html.twig" %}
+
+{% block body_content %}
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="page-header"><i class="fa fa-camera-retro fa-fw"></i>Edytuj wizytę: {{ visit.number }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                           Utworzono: <strong>{{ visit.createdAt|date('d/m/Y H:i') }}</strong>{% if visit.createdBy is not empty  %}, przez: <strong>{{ visit.createdBy.fullName }}</strong>{% endif %}
+                        </div>
+                        {% if visit.updatedAt is not empty  %}
+                        <div class="col-md-6">
+                            Zmodyfikowano: <strong>{{ visit.updatedAt|date('d/m/Y H:i') }}</strong>{% if visit.updatedBy is not empty  %}, przez: <strong>{{ visit.updatedBy.fullName }}</strong>{% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            {{ form_start(form, {action: path('visit_edit', {id: visit.id}) , attr: {id: 'visitForm', novalidate: 'novalidate'} }) }}
+            {{ form_errors(form) }}
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p>
+                        <button type="submit" class="btn btn-success">Zapisz</button>
+                        <a href="{{ path('visit_show', {id: visit.id}) }}" class="btn btn-primary">Pokaż</a>
+                        <a href="{{ path('visit_list') }}" class="btn btn-default">Anuluj</a>
+                    </p>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Dane wizyty
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    {{ form_row(form.number) }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form_row(form.visitDate) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.package) }}
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    {{ form_row(form.realizationStatus) }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form_row(form.rightsDeadline) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.newsletter) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{ form_row(form.categories) }}
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Dane osoby
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {{ form_row(form.firstname) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_row(form.lastname) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_row(form.cardNumber) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_row(form.lpId) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_row(form.contactSource) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.city) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.district) }}
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Rozliczenia
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {{ form_row(form.paymentStatus) }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form_row(form.externalsCosts) }}
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label required">Cena netto za sesję w pakiecie</label>
+                                        <p class="text-success"><strong>{{ visit.package.priceNetPerVisit|number_format(2, ',', ' ') }} zł</strong></p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {{ form_row(form.scountingOwner) }}
+                                    <p class="text-primary">{{ visit.priceNetScouting|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form_row(form.photoOwner) }}
+                                    <p class="text-primary">{{ visit.priceNetPhoto|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form_row(form.interviewOwner) }}
+                                    <p class="text-primary">{{ visit.priceNetInterview|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form_row(form.postproductionOwner) }}
+                                    <p class="text-primary">{{ visit.priceNetPostproduction|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form_row(form.editingOwner) }}
+                                    <p class="text-primary">{{ visit.priceNetEditing|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form_row(form.provisionOwner) }}
+                                    <p class="text-primary">{{ visit.priceNetProvision|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Inne
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.description) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.restrictions) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+            <button type="submit" class="btn btn-success">Zapisz</button>
+            <a href="{{ path('visit_list') }}" class="btn btn-default">Anuluj</a>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+    <script type="text/javascript">
+        $('input.date').datepicker({
+            "dateFormat": "dd/mm/yy"
+        });
+    </script>
+{% endblock body_content %}

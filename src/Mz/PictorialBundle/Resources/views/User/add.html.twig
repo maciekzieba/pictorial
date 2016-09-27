@@ -1,0 +1,49 @@
+{% extends "MzPictorialBundle::base.html.twig" %}
+
+
+
+{% block body_content %}
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="page-header"><i class="fa fa-users fa-fw"></i>Dodaj użytkownika</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_start(form, {action: path('user_add') , attr: {id: 'userForm', novalidate: 'novalidate'} }) }}
+            {{ form_errors(form) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.email, {attr: {autocomplete: 'off'}}) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.firstname, {attr: {autocomplete: 'off'}}) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.lastname, {attr: {autocomplete: 'off'}}) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.roles) }}
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form_row(form.plainPassword, {attr: {autocomplete: 'off'}}) }}
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+            <button type="submit" class="btn btn-success">Zapisz</button>
+            <a href="{{ path('user_list') }}" class="btn btn-default">Anuluj</a>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+{% endblock body_content %}

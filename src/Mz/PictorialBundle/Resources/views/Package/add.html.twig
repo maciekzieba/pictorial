@@ -1,0 +1,70 @@
+{% extends "MzPictorialBundle::base.html.twig" %}
+
+{% block javascripts %}
+    <script src="{{ asset('/bundles/mzpictorial/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('/bundles/mzpictorial/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.pl.js') }}"></script>
+
+{% endblock javascripts %}
+
+{% block stylesheets %}
+    <link href="{{ asset('/bundles/mzpictorial/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+{% block body_content %}
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="page-header"><i class="fa fa-suitcase fa-fw"></i>Dodaj pakiet</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            {{ form_start(form, {action: path('package_add') , attr: {id: 'packageForm', novalidate: 'novalidate'} }) }}
+            {{ form_errors(form) }}
+            <div class="row">
+                <div class="col-md-2">
+                    {{ form_row(form.validityDate) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_row(form.visitsQuantity) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_row(form.priceNet) }}
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    {{ form_row(form.status) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_row(form.invoiceNumber) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_row(form.invoiceValueNet) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.description) }}
+                </div>
+
+            </div>
+
+            {{ form_rest(form) }}
+            <button type="submit" class="btn btn-success">Zapisz</button>
+            <a href="{{ path('package_list') }}" class="btn btn-default">Anuluj</a>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+    <script type="text/javascript">
+        $('#{{ form.validityDate.vars.id }}').datetimepicker({
+            language: 'pl',
+            format: "mm/yyyy",
+            startView: 'year',
+            minView: 'year',
+            autoclose: true
+        });
+    </script>
+{% endblock body_content %}

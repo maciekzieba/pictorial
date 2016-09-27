@@ -1,0 +1,39 @@
+{% extends "MzPictorialBundle::base.html.twig" %}
+
+{% block body_content %}
+
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="page-header"><i class="fa fa-users fa-fw"></i>Użytkownicy</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <a href="{{ path('user_add') }}" class="btn btn-success">Dodaj</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            {{ render_listing(listing) }}
+        </div>
+    </div>
+{% endblock body_content %}
+
+
+{% block listing_filters %}
+    <div id="listing_filters_{{ listing.name }}" class="">
+        <div class="row">
+            <div class="col-md-2">
+                {{ form_row(listing.filtersFormView.name) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(listing.filtersFormView.email) }}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,261 @@
+{% extends "MzPictorialBundle::base.html.twig" %}
+
+{% block body_content %}
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="page-header"><i class="fa fa-camera-retro fa-fw"></i>Wizyta: {{ visit.number }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                           Utworzono: <strong>{{ visit.createdAt|date('d/m/Y H:i') }}</strong>{% if visit.createdBy is not empty  %}, przez: <strong>{{ visit.createdBy.fullName }}</strong>{% endif %}
+                        </div>
+                        {% if visit.updatedAt is not empty  %}
+                        <div class="col-md-6">
+                            Zmodyfikowano: <strong>{{ visit.updatedAt|date('d/m/Y H:i') }}</strong>{% if visit.updatedBy is not empty  %}, przez: <strong>{{ visit.updatedBy.fullName }}</strong>{% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <p>
+                <a href="{{ path('visit_edit', {id: visit.id}) }}" class="btn btn-success">Edytuj</a>
+            </p>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#data" data-toggle="tab">Dane</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class=""><a href="#settlement" data-toggle="tab">Rozliczenia</a></li>
+                            <li class=""><a href="#invoices" data-toggle="tab">Faktury</a></li>
+                        {% endif %}
+                        <li class=""><a href="#publications" data-toggle="tab">Publikacje</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="data">
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Numer</label>
+                                        <p>{{ visit.number }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Data</label>
+                                        <p>{{ visit.visitDate|date('d/m/Y') }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Pakiet</label>
+                                        <p>{{ visit.package.fullName }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Imię</label>
+                                        <p>{{ visit.firstname }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Nazwisko</label>
+                                        <p>{{ visit.lastname }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Miasto</label>
+                                        <p>{{ visit.city }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Dzielnica</label>
+                                        <p>{{ visit.district }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Numer karty IKEA FAMILY</label>
+                                        <p>{{ visit.cardNumber }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">LP ID</label>
+                                        <p>{{ visit.lpId }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Status realizacji</label>
+                                        <p></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Publikacja w biuletynie?</label>
+                                        <p>{% if visit.newsletter %}Tak{% else %}Nie{% endif %}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Data praw do zdjęć</label>
+                                        <p>{{ visit.rightsDeadline|date('d/m/Y') }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Kategorie</label>
+                                        <p>
+                                            {% spaceless %}
+                                            {% set delimiter = '' %}
+                                            {% for category in  visit.categories %}{{ delimiter }}{{ category.name }}{% set delimiter = ', ' %}{% endfor %}
+                                            {% endspaceless %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label required">Opis</label>
+                                        <p>{{ visit.description }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label required">Restrykcje</label>
+                                        <p>{{ visit.restrictions }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <div class="tab-pane" id="settlement">
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label required">Status płatności</label>
+                                        <p></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label required">Koszty zewnętrzne</label>
+                                        <p>{{ visit.externalsCosts|number_format(2, ',', ' ') }} zł</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label required">Scouting {{ visit.scountingShare|number_format(2, '.', ' ') }} %</label>
+                                        <p>{% if visit.scountingOwner is not empty %} {{ visit.scountingOwner.fullName }} {% endif %}</p>
+                                    </div>
+                                    <p class="text-primary">{{ visit.priceNetScouting|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label required">Zdjęcia {{ visit.photoShare|number_format(2, '.', ' ') }} %</label>
+                                        <p>{% if visit.photoOwner is not empty %} {{ visit.photoOwner.fullName }} {% endif %}</p>
+                                    </div>
+                                    <p class="text-primary">{{ visit.priceNetPhoto|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label required">Wywiad {{ visit.interviewShare|number_format(2, '.', ' ') }} %</label>
+                                        <p>{% if visit.interviewOwner is not empty %} {{ visit.interviewOwner.fullName }} {% endif %}</p>
+                                    </div>
+                                    <p class="text-primary">{{ visit.priceNetInterview|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label required">Postprodukcja {{ visit.postproductionShare|number_format(2, '.', ' ') }} %</label>
+                                        <p>{% if visit.postproductionOwner is not empty %} {{ visit.postproductionOwner.fullName }} {% endif %}</p>
+                                    </div>
+                                    <p class="text-primary">{{ visit.priceNetPostproduction|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label required">Redakcja {{ visit.editingShare|number_format(2, '.', ' ') }} %</label>
+                                        <p>{% if visit.editingOwner is not empty %} {{ visit.editingOwner.fullName }} {% endif %}</p>
+                                    </div>
+                                    <p class="text-primary">{{ visit.priceNetEditing|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                                <div>
+                                    <div class="form-group">
+                                        <label class="control-label required">Prowizja {{ visit.provisionShare|number_format(2, '.', ' ') }} %</label>
+                                        <p>{% if visit.provisionOwner is not empty %} {{ visit.provisionOwner.fullName }} {% endif %}</p>
+                                    </div>
+                                    <p class="text-primary">{{ visit.priceNetProvision|number_format(2, ',', ' ') }} zł</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <div class="tab-pane" id="invoices">
+
+                        </div>
+                        {% endif %}
+                        <div class="tab-pane" id="publications">
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p>
+                                                <a href="{{ path('publication_add', {visitId: visit.id}) }}" class="btn btn-success">Dodaj</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Typ</th>
+                                            <th>Url</th>
+                                            <th>#</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for publication in visit.publications %}
+                                            <tr>
+                                                <td>{{ publication.type }}</td>
+                                                <td><a href="{{ publication.url }}" target="_blank">{{ publication.url }}</a></td>
+                                                <td>
+                                                    <a class="btn btn-primary btn-xs" href="{{ path('publication_edit', {visitId: visit.id, id: publication.id}) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edytuj</a>
+                                                    <a class="btn btn-danger btn-xs" href="{{ path('publication_remove', {visitId: visit.id, id: publication.id}) }}" onclick="return confirm('Czy na pewno chcesz usunąć?');"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Usuń</a>
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body_content %}
