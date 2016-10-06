@@ -49,7 +49,7 @@ class VisitForm extends AbstractType
                 'html5' => false,
                 'format' => 'dd/MM/yyyy',
                 'constraints' => array(
-                    new Assert\NotBlank()
+
                 )
             ))
             ->add('firstname', 'text', array(

@@ -66,7 +66,7 @@
                 {% for visit in data.visits %}
                     <tr>
                         <td><a href="{{ path('visit_show', {id: visit.id}) }}">{{ visit.number }}</a></td>
-                        <td>{{ visit.visitDate|date('d/m/Y') }}</td>
+                        <td>{% if visit.visitDate is not null %}{{ visit.visitDate|date('d/m/Y') }}{% endif %}</td>
                         <td>{{ visit.externalsCosts|number_format(2, ',', ' ') }} zł</td>
                         <td>{{ visit.realizationStatus }}</td>
                         <td>{{ visit.package.fullName }} {{ visit.packageStatus }}</td>

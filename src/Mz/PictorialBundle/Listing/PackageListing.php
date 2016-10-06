@@ -36,13 +36,6 @@ class PackageListing extends AbstractType
     public function buildFilters(FilterBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('id', 'search', array(
-                'label' => 'Id',
-                'filter' => array(
-                    'expression' => "p.id LIKE ?",
-                    'eval' => '%like%'
-                )
-            ))
             ->add('status', 'choice', array(
                 'label' => 'Status',
                 'choices' => $this->packageService->getStatuses(),
@@ -59,9 +52,6 @@ class PackageListing extends AbstractType
     public function buildColumns(ColumnBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('id', 'column', array(
-                'label' => 'Id',
-            ))
             ->add('validityDate', 'column', array(
                 'label' => 'Data pakietu',
             ))
