@@ -46,7 +46,7 @@ class Visit
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="visit_date", type="datetime", nullable=false)
+     * @ORM\Column(name="visit_date", type="datetime", nullable=true)
      */
     private $visitDate;
 

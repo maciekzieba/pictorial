@@ -58,7 +58,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label required">Data</label>
-                                        <p>{{ visit.visitDate|date('d/m/Y') }}</p>
+                                        <p>{% if visit.visitDate is not null %}{{ visit.visitDate|date('d/m/Y') }}{% endif %}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
