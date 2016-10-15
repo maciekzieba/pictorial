@@ -74,6 +74,10 @@ class UserListing extends AbstractType
                     return $rolesString;
                 }
             ))
+            ->add('actions', 'column', array(
+                'label' => 'Akcje',
+                'order_by' => false
+            ))
         ;
     }
 

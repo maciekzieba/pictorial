@@ -1,0 +1,47 @@
+{% extends "MzPictorialBundle::base.html.twig" %}
+
+{% block body_content %}
+
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="page-header"><i class="fa fa-dollar fa-fw"></i>Cennik dla {{ user.fullName }}</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <a href="{{ path('user_pricelist_add', {userId: user.id}) }}" class="btn btn-success">Dodaj</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            {{ render_listing(listing) }}
+        </div>
+    </div>
+{% endblock body_content %}
+
+
+
+{% block _column_actions %}
+    <td>
+        <div class="row">
+            <div class="col-md-2">
+                <a class="btn btn-primary btn-xs" href="{{ path('user_pricelist_edit', {userId: row.user.id, id: row.id}) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger btn-xs" href="{{ path('user_pricelist_remove', {userId: row.user.id, id: row.id}) }}" onclick="return confirm('Czy na pewno chcesz usunąć?');"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+            </div>
+        </div>
+    </td>
+{% endblock %}
+
+{% block listing_filters %}
+{% endblock %}
+
+
+{% block _column_price %}
+<td>{{ value|number_format(2, ',', ' ') }} zł</td>
+{% endblock  %}

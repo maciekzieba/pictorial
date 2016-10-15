@@ -1,0 +1,32 @@
+{% extends "MzPictorialBundle::base.html.twig" %}
+
+{% block body_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header"><i class="fa fa-dollar fa-fw"></i>Dodaj cennik dla {{ user.fullName }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            {{ form_start(form, {action: path('user_pricelist_add', {userId: user.id}) , attr: { novalidate: 'novalidate'} }) }}
+            {{ form_errors(form) }}
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_row(form.visitRole) }}
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_row(form.price) }}
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+            <button type="submit" class="btn btn-success">Zapisz</button>
+            <a href="{{ path('user_pricelist', {userId: user.id}) }}" class="btn btn-default">Anuluj</a>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock body_content %}
