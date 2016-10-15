@@ -8,11 +8,14 @@ use Mz\PictorialBundle\Entity\Visit;
 use Mz\PictorialBundle\Form\Type\DateMonthType;
 use Mz\PictorialBundle\Form\Type\VisitCostType;
 use Mz\PictorialBundle\Service\PackageService;
+use Mz\PictorialBundle\Service\UserService;
 use Mz\PictorialBundle\Service\VisitService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,6 +23,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 class VisitCostForm extends AbstractType
 {
 
+    /** @var UserService  */
+    protected $userService;
+
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -38,6 +49,14 @@ class VisitCostForm extends AbstractType
         ;
 
 
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars = array_replace($view->vars, array(
+            'pricelist'         => json_encode($this->userService->getAllPricelistArray()),
+
+        ));
     }
 
 

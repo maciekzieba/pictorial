@@ -21,6 +21,8 @@
 {% endblock %}
 
 {% block _visit_cost_costs_widget %}
+
+
     <a href="#" id="add_cost_link" class="btn btn-primary">Dodaj rekord</a>
     <div id="costsContainer" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
         {% for row in form.children %}
@@ -55,6 +57,10 @@
 {% endblock %}
 
 {% block body_content %}
+
+    <script>
+        var pricelist = {{ form.vars.pricelist|raw }};
+    </script>
 
     <div class="row">
         <div class="col-md-4">

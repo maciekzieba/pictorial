@@ -6,6 +6,7 @@ use Mz\PictorialBundle\Entity\Visit;
 use Mz\PictorialBundle\Form\VisitCostForm;
 use Mz\PictorialBundle\Form\VisitForm;
 use Mz\PictorialBundle\Listing\VisitListing;
+use Mz\PictorialBundle\Service\UserService;
 use Mz\PictorialBundle\Service\VisitService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -22,6 +23,12 @@ class VisitController extends Controller
      * @var VisitService
      */
     protected $visitService;
+
+    /**
+     * @DI\Inject("pictorial.user")
+     * @var UserService
+     */
+    protected $userService;
 
     /**
      * @Route("/visit/{id}/show", name="visit_show", requirements={"id": "\d+"})
@@ -45,7 +52,7 @@ class VisitController extends Controller
         /** @var Visit $visit */
         $visit = $this->visitService->demandVisit($visitId);
 
-        $form = $this->createForm(new VisitCostForm(), $visit);
+        $form = $this->createForm(new VisitCostForm($this->userService), $visit);
         $form->handleRequest($request);
 
 

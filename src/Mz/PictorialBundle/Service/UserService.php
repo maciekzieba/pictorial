@@ -117,6 +117,31 @@ class UserService
         $this->em->flush();
     }
 
+    public function getAllPricelistArray()
+    {
+        $builder = $this->em->createQueryBuilder();
+        $builder->select('p, u, v')
+            ->from('MzPictorialBundle:Pricelist', 'p')
+            ->innerJoin('p.user', 'u')
+            ->innerJoin('p.visitRole', 'v');
+
+        $result = $builder->getQuery()->getArrayResult();
+
+        $pricelist = array();
+
+        foreach ($result as $row) {
+            if (!isset($pricelist[$row['user']['id']])) {
+                $pricelist[$row['user']['id']] = array();
+            }
+            $pricelist[$row['user']['id']][$row['visitRole']['id']] = $row['price'];
+
+        }
+
+        return $pricelist;
+
+
+    }
+
 
     /**
      * @return mixed
