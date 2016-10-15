@@ -1,0 +1,89 @@
+{% extends "MzPictorialBundle::base.html.twig" %}
+
+{% form_theme form _self %}
+
+{% block visit_cost_type_widget %}
+    <div class="row costWidgetRow" id="{{ form.vars.id }}">
+
+        <div class="col-md-5">
+            {{ form_row(form.visitRole) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.user) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.price) }}
+        </div>
+        <div class="col-md-1">
+            <button  onclick="$('#{{ form.vars.id }}').remove();" class="btn btn-danger">Usuń</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block _visit_cost_costs_widget %}
+    <a href="#" id="add_cost_link" class="btn btn-primary">Dodaj rekord</a>
+    <div id="costsContainer" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
+        {% for row in form.children %}
+            {{ form_widget(row) }}
+        {% endfor %}
+    </div>
+
+    <script>
+        var $collectionHolder;
+        var $addCostLink = $('#add_cost_link');
+
+
+        jQuery(document).ready(function() {
+            $collectionHolder = $('#costsContainer');
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addCostLink.on('click', function(e) {
+                e.preventDefault();
+                addCostForm($collectionHolder);
+            });
+        });
+
+        function addCostForm($collectionHolder) {
+            var prototype = $collectionHolder.data('prototype');
+            var index = $collectionHolder.data('index');
+            var newForm = prototype.replace(/__name__/g, index);
+            $collectionHolder.data('index', index + 1);
+            var $newFormLi = $collectionHolder.append(newForm);
+
+        }
+    </script>
+{% endblock %}
+
+{% block body_content %}
+
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="page-header"><i class="fa fa-dollar fa-fw"></i>Edytuj koszty wizyty {{ visit.number }}</h1>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            {{ form_start(form, {action: path('visit_costs', {visitId: visit.id}) , attr: { novalidate: 'novalidate'} }) }}
+            {{ form_errors(form) }}
+            <div class="row">
+                <div class="col-md-6">
+
+                    {{ form_widget(form.costs) }}
+
+                </div>
+
+            </div>
+
+            {{ form_rest(form) }}
+            <button type="submit" class="btn btn-success">Zapisz</button>
+            <a href="{{ path('visit_list') }}" class="btn btn-default">Anuluj</a>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+
+{% endblock body_content %}
+

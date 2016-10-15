@@ -21,13 +21,6 @@ class VisitService
      */
     private $em;
 
-    protected $defaultScountingShare = 5.00;
-    protected $defaultPhotoShare = 50.00;
-    protected $defaultInterviewShare = 20.00;
-    protected $defaultPostproductionShare = 15.00;
-    protected $defaultEditingShare = 5.00;
-    protected $defaultProvisionShare = 5.00;
-
     protected $paymentStatuses = array(
         'realized' => 'W realizacji',
         'invoiced' => 'Zafakturowana',
@@ -89,103 +82,6 @@ class VisitService
         }
         return $payment;
     }
-
-    /**
-     * @return float
-     */
-    public function getDefaultScountingShare()
-    {
-        return $this->defaultScountingShare;
-    }
-
-    /**
-     * @param float $defaultScountingShare
-     */
-    public function setDefaultScountingShare($defaultScountingShare)
-    {
-        $this->defaultScountingShare = $defaultScountingShare;
-    }
-
-    /**
-     * @return float
-     */
-    public function getDefaultPhotoShare()
-    {
-        return $this->defaultPhotoShare;
-    }
-
-    /**
-     * @param float $defaultPhotoShare
-     */
-    public function setDefaultPhotoShare($defaultPhotoShare)
-    {
-        $this->defaultPhotoShare = $defaultPhotoShare;
-    }
-
-    /**
-     * @return float
-     */
-    public function getDefaultInterviewShare()
-    {
-        return $this->defaultInterviewShare;
-    }
-
-    /**
-     * @param float $defaultInterviewShare
-     */
-    public function setDefaultInterviewShare($defaultInterviewShare)
-    {
-        $this->defaultInterviewShare = $defaultInterviewShare;
-    }
-
-    /**
-     * @return float
-     */
-    public function getDefaultPostproductionShare()
-    {
-        return $this->defaultPostproductionShare;
-    }
-
-    /**
-     * @param float $defaultPostproductionShare
-     */
-    public function setDefaultPostproductionShare($defaultPostproductionShare)
-    {
-        $this->defaultPostproductionShare = $defaultPostproductionShare;
-    }
-
-    /**
-     * @return float
-     */
-    public function getDefaultEditingShare()
-    {
-        return $this->defaultEditingShare;
-    }
-
-    /**
-     * @param float $defaultEditingShare
-     */
-    public function setDefaultEditingShare($defaultEditingShare)
-    {
-        $this->defaultEditingShare = $defaultEditingShare;
-    }
-
-    /**
-     * @return float
-     */
-    public function getDefaultProvisionShare()
-    {
-        return $this->defaultProvisionShare;
-    }
-
-    /**
-     * @param float $defaultProvisionShare
-     */
-    public function setDefaultProvisionShare($defaultProvisionShare)
-    {
-        $this->defaultProvisionShare = $defaultProvisionShare;
-    }
-
 
 
     /**

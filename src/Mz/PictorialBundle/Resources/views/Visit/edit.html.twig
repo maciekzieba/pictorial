@@ -126,6 +126,9 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-2">
+                                    {{ form_row(form.owner) }}
+                                </div>
+                                <div class="col-md-2">
                                     {{ form_row(form.paymentStatus) }}
                                 </div>
                                 <div class="col-md-2">
@@ -138,32 +141,6 @@
                                     </div>
                                 </div>
 
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    {{ form_row(form.scountingOwner) }}
-                                    <p class="text-primary">{{ visit.priceNetScouting|number_format(2, ',', ' ') }} zł</p>
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form_row(form.photoOwner) }}
-                                    <p class="text-primary">{{ visit.priceNetPhoto|number_format(2, ',', ' ') }} zł</p>
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form_row(form.interviewOwner) }}
-                                    <p class="text-primary">{{ visit.priceNetInterview|number_format(2, ',', ' ') }} zł</p>
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form_row(form.postproductionOwner) }}
-                                    <p class="text-primary">{{ visit.priceNetPostproduction|number_format(2, ',', ' ') }} zł</p>
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form_row(form.editingOwner) }}
-                                    <p class="text-primary">{{ visit.priceNetEditing|number_format(2, ',', ' ') }} zł</p>
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form_row(form.provisionOwner) }}
-                                    <p class="text-primary">{{ visit.priceNetProvision|number_format(2, ',', ' ') }} zł</p>
-                                </div>
                             </div>
                         </div>
                     </div>

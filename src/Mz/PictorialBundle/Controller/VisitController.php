@@ -3,6 +3,7 @@
 namespace Mz\PictorialBundle\Controller;
 
 use Mz\PictorialBundle\Entity\Visit;
+use Mz\PictorialBundle\Form\VisitCostForm;
 use Mz\PictorialBundle\Form\VisitForm;
 use Mz\PictorialBundle\Listing\VisitListing;
 use Mz\PictorialBundle\Service\VisitService;
@@ -12,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class VisitController extends Controller
 {
@@ -29,6 +31,37 @@ class VisitController extends Controller
     {
         $visit = $this->visitService->demandVisit($id);
         return array(
+            'visit' => $visit
+        );
+    }
+
+    /**
+     * @Route("/admin/visit/{visitId}/costs", name="visit_costs", requirements={"visitId": "\d+"})
+     * @Template()
+     * @Security("has_role('ROLE_SUPER_ADMIN')")
+     */
+    public function visitCostsAction(Request $request, $visitId)
+    {
+        /** @var Visit $visit */
+        $visit = $this->visitService->demandVisit($visitId);
+
+        $form = $this->createForm(new VisitCostForm(), $visit);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+
+                $this->visitService->saveVisit($visit);
+                $this->addFlash('success', 'Koszty wizyty zostały zapisane');
+                //return $this->redirect($this->generateUrl('visit_costs', array('visitId' => $visit->getId())));
+            } else {
+
+            }
+        }
+
+        return array(
+            'form' => $form->createView(),
             'visit' => $visit
         );
     }
@@ -89,12 +122,6 @@ class VisitController extends Controller
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $visit->setScountingShare($this->visitService->getDefaultScountingShare());
-                $visit->setEditingShare($this->visitService->getDefaultEditingShare());
-                $visit->setInterviewShare($this->visitService->getDefaultInterviewShare());
-                $visit->setPhotoShare($this->visitService->getDefaultPhotoShare());
-                $visit->setPostproductionShare($this->visitService->getDefaultPostproductionShare());
-                $visit->setProvisionShare($this->visitService->getDefaultProvisionShare());
 
                 $this->visitService->saveVisit($visit);
                 $this->addFlash('success', 'Wizyta została dodana');
