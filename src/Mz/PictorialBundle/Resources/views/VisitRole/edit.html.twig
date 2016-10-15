@@ -1,0 +1,32 @@
+{% extends "MzPictorialBundle::base.html.twig" %}
+
+{% block body_content %}
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="page-header">Edytuj rolę {{ visitRole.name }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            {{ form_start(form, {action: path('visit_role_edit', {id: visitRole.id}) , attr: { novalidate: 'novalidate'} }) }}
+            {{ form_errors(form) }}
+            <div class="row">
+                <div class="col-md-2">
+                    {{ form_row(form.name) }}
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    {{ form_row(form.code) }}
+                </div>
+
+            </div>
+            {{ form_rest(form) }}
+            <button type="submit" class="btn btn-success">Zapisz</button>
+            <a href="{{ path('visit_role_list') }}" class="btn btn-default">Anuluj</a>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock body_content %}

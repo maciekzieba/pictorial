@@ -1,0 +1,7 @@
+
+php app/console cache:clear --env=prod
+php app/console cache:clear --env=dev
+
+Database:
+php app/console doctrine:mapping:import --force MzPictorialBundle annotation --filter=""; php app/console doctrine:generate:entities --no-backup MzPictorialBundle
+
