@@ -18,6 +18,16 @@
             <button  onclick="$('#{{ form.vars.id }}').remove();" class="btn btn-danger">Usuń</button>
         </div>
     </div>
+
+    <script>
+        $('#{{ form.visitRole.vars.id }}').change(function(){
+            tryReadPriceFromPricelist('{{ form.visitRole.vars.id }}', '{{ form.user.vars.id }}', '{{ form.price.vars.id }}')
+        });
+
+        $('#{{ form.user.vars.id }}').change(function(){
+            tryReadPriceFromPricelist('{{ form.visitRole.vars.id }}', '{{ form.user.vars.id }}', '{{ form.price.vars.id }}')
+        });
+    </script>
 {% endblock %}
 
 {% block _visit_cost_costs_widget %}
@@ -60,6 +70,15 @@
 
     <script>
         var pricelist = {{ form.vars.pricelist|raw }};
+
+        function tryReadPriceFromPricelist(roleId, userId, priceId) {
+            var user = $('#'+userId).val();
+            var role = $('#'+roleId).val();
+
+            if (pricelist[user] && pricelist[user][role]) {
+                $('#'+priceId).val(pricelist[user][role]);
+            }
+        }
     </script>
 
     <div class="row">
