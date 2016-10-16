@@ -117,6 +117,7 @@ class MigrationCommand extends ContainerAwareCommand
             'visit' => $visitId,
             'price' => $price
         );
+
         $this->connection->insert('visit_cost', $insertArr);
         return $this->connection->lastInsertId();
     }

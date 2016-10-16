@@ -62,8 +62,8 @@ class VisitListing extends AbstractType
                     'expression' => "v.paymentStatus LIKE ?",
                 )
             ))
-            ->add('photoOwner', 'entity', array(
-                'label' => 'Zdjęcia',
+            ->add('owner', 'entity', array(
+                'label' => 'Właściciel',
                 'class' => 'MzPictorialBundle:User',
                 'property' => 'fullName',
                 'placeholder' => '',
@@ -75,7 +75,7 @@ class VisitListing extends AbstractType
                         ;
                 },
                 'filter' => array(
-                    'expression' => "v.photoOwner = ?",
+                    'expression' => "v.owner = ?",
                 )
             ))
             ->add('package', 'entity', array(
