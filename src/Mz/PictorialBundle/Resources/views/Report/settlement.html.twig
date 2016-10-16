@@ -60,6 +60,7 @@
                     <th>Pakiet</th>
                     <th>Status płatności</th>
                     <th>Wynagrodzenie</th>
+                    <th>Wynagrodzenie suma</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -71,7 +72,16 @@
                         <td>{{ visit.realizationStatus }}</td>
                         <td>{{ visit.package.fullName }} {{ visit.packageStatus }}</td>
                         <td>{{ visit.paymentStatus }}</td>
-                        <td>{{ visit.payment|number_format(2, ',', ' ') }} zł</td>
+                        <td>
+                            <ul>
+                                {% for cost in visit.costs %}
+                                    <li>{{ cost.visitRole.name }} {{ cost.price|number_format(2, ',', ' ') }} zł</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            <b>{{ visit.payment|number_format(2, ',', ' ') }} zł</b>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
