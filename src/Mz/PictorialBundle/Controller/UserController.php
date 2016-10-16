@@ -6,6 +6,7 @@ use FOS\UserBundle\Model\UserManager;
 use Mz\PictorialBundle\Entity\Pricelist;
 use Mz\PictorialBundle\Entity\User;
 use Mz\PictorialBundle\Form\PasswordForm;
+use Mz\PictorialBundle\Form\UserEditForm;
 use Mz\PictorialBundle\Form\UserForm;
 use Mz\PictorialBundle\Form\UserPricelistForm;
 use Mz\PictorialBundle\Listing\UserListing;
@@ -78,6 +79,32 @@ class UserController extends Controller
 
         return array(
             'form' => $form->createView()
+        );
+    }
+
+    /**
+     * @Route("/admin/user/{id}/edit", name="user_edit", requirements={"id": "\d+"})
+     * @Template()
+     */
+    public function editAction(Request $request, $id)
+    {
+        $user = $this->userService->demandUser($id);
+        $form = $this->createForm(new UserEditForm($this->userService->getRolesList()), $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->userManager->updateUser($user);
+                $this->addFlash('success', 'Użytkownik został zapisany');
+                return $this->redirect($this->generateUrl('user_list', array()));
+            } else {
+
+            }
+        }
+
+        return array(
+            'form' => $form->createView(),
+            'user' => $user
         );
     }
 

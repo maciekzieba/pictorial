@@ -186,7 +186,8 @@ class ReportService
             }
             $activesheet->setCellValue('G'.$rowCursor, implode(', ', $catArr));
             $activesheet->setCellValue('H'.$rowCursor, $this->visitService->getContactSourcesText($visit->getContactSource()));
-            $activesheet->setCellValue('I'.$rowCursor, $visit->getCardNumber());
+            $activesheet->setCellValueExplicit('I'.$rowCursor, $visit->getCardNumber(), \PHPExcel_Cell_DataType::TYPE_STRING);
+
             if ($visit->getOwner() instanceof User) {
                 $activesheet->setCellValue('J'.$rowCursor, $visit->getOwner()->getFullName());
             }
@@ -233,7 +234,7 @@ class ReportService
                     );
                     break;
             }
-            $activesheet->setCellValue('L'.$rowCursor, $visit->getDistrict());
+            $activesheet->setCellValue('L'.$rowCursor, $visit->getRestrictions());
             /** @var Publication $publication */
             $publicationArray = array();
             foreach ($visit->getPublications() as $publication) {
@@ -275,6 +276,7 @@ class ReportService
         $builder->select('v.realizationStatus, COUNT(v) AS amount')
             ->from('MzPictorialBundle:Visit', 'v', 'v.realizationStatus')
             ->groupBy('v.realizationStatus');
+
         $result = $builder->getQuery()->getArrayResult();
         $stat = array();
         foreach ($this->visitService->getRealizationStatuses() as $statusKey => $statusText) {
@@ -297,7 +299,8 @@ class ReportService
         $builder = $this->em->createQueryBuilder();
         $builder->select('v.city, COUNT(v) AS amount')
             ->from('MzPictorialBundle:Visit', 'v')
-            ->groupBy('v.city');
+            ->groupBy('v.city')
+            ->orderBy('amount', 'DESC');
         return $builder->getQuery()->getArrayResult();
     }
 

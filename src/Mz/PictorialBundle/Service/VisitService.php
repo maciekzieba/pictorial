@@ -29,6 +29,7 @@ class VisitService
     );
 
     protected $realizationStatuses = array(
+        'ordered' => 'Zlecona',
         'appointed' => 'Umówiona',
         'realized' => 'Zrealizowana',
         'passed' => 'Zdana',

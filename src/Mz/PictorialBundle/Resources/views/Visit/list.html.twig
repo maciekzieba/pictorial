@@ -122,7 +122,15 @@
 {% endblock %}
 
 {% block _column_realizationStatus %}
-    <td>
+    {% set bgcolor = '#ffffff' %}
+    {% if row.realizationStatus == 'realized' %} {% set bgcolor = 'rgba(156,186,95,0.5)' %} {% endif %}
+    {% if row.realizationStatus == 'passed' %} {% set bgcolor = 'rgba(15,127,18,0.5)' %} {% endif %}
+    {% if row.realizationStatus == 'paid' %} {% set bgcolor = 'rgba(253,126,37,0.5)' %} {% endif %}
+    {% if row.realizationStatus == 'cancelled' %} {% set bgcolor = 'rgba(183,7,17,0.5)' %} {% endif %}
+    <td style="background-color: {{ bgcolor }};">
+
+
+
         <span class="editable" data-type="select" data-data='[["appointed","Umówiona"],["realized","Zrealizowana"],["passed","Zdana"],["paid","Opublikowana"],["cancelled","Anulowana"]]' data-object="{{ row.id }}" data-attribute="realizationStatus">{{ value }}</span>
     </td>
 {% endblock %}

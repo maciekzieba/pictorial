@@ -55,25 +55,21 @@ class VisitForm extends AbstractType
             ->add('firstname', 'text', array(
                 'label' => 'Imię',
                 'constraints' => array(
-                    new Assert\NotBlank()
                 )
             ))
             ->add('lastname', 'text', array(
                 'label' => 'Nazwisko',
                 'constraints' => array(
-                    new Assert\NotBlank()
                 )
             ))
             ->add('city', 'text', array(
                 'label' => 'Miasto',
                 'constraints' => array(
-                    new Assert\NotBlank()
                 )
             ))
             ->add('district', 'text', array(
                 'label' => 'Dzielnica',
                 'constraints' => array(
-                    new Assert\NotBlank()
                 )
             ))
             ->add('cardNumber', 'text', array(
@@ -140,6 +136,7 @@ class VisitForm extends AbstractType
                 'label' => 'Właściciel',
                 'class' => 'MzPictorialBundle:User',
                 'property' => 'fullName',
+                'placeholder' => '',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                         ->where('u.roles LIKE :roles')
