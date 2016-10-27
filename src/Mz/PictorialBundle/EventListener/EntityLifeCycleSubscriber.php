@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: pablo
- * Date: 2015-01-31
- * Time: 20:25
- */
+
+
 namespace Mz\PictorialBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
