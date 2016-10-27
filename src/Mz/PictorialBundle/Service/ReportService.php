@@ -336,7 +336,7 @@ class ReportService
         $builder->select('COUNT(p)')
             ->from('MzPictorialBundle:Package', 'p')
             ->where('p.status LIKE :status')
-            ->setParameter('status', 'delayed')
+            ->setParameter('status', 'commissioned')
         ;
         return $builder->getQuery()->getSingleScalarResult();
     }

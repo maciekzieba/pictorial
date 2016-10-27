@@ -17,10 +17,12 @@
         <h1 class="page-header"><i class="fa fa-signal fa-fw"></i>Raporty</h1>
     </div>
 </div>
+{% if is_granted('ROLE_ADMIN') %}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active"><a href="{{ path('report_client') }}">Raport z wizyt</a></li>
     <li role="presentation"><a href="{{ path('report_settlement') }}">Raport rozliczeń</a></li>
 </ul>
+{% endif %}
 <br>
 <div class="row">
     <div class="col-md-10">
