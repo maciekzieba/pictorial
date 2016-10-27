@@ -154,8 +154,14 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group">
+                                        <label class="control-label required">Właściciel</label>
+                                        <p>{{ visit.owner.fullName }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
                                         <label class="control-label required">Status płatności</label>
-                                        <p></p>
+                                        <p>{{ visit.paymentStatus }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -166,47 +172,26 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label required">Scouting {{ visit.scountingShare|number_format(2, '.', ' ') }} %</label>
-                                        <p>{% if visit.scountingOwner is not empty %} {{ visit.scountingOwner.fullName }} {% endif %}</p>
-                                    </div>
-                                    <p class="text-primary">{{ visit.priceNetScouting|number_format(2, ',', ' ') }} zł</p>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label required">Zdjęcia {{ visit.photoShare|number_format(2, '.', ' ') }} %</label>
-                                        <p>{% if visit.photoOwner is not empty %} {{ visit.photoOwner.fullName }} {% endif %}</p>
-                                    </div>
-                                    <p class="text-primary">{{ visit.priceNetPhoto|number_format(2, ',', ' ') }} zł</p>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label required">Wywiad {{ visit.interviewShare|number_format(2, '.', ' ') }} %</label>
-                                        <p>{% if visit.interviewOwner is not empty %} {{ visit.interviewOwner.fullName }} {% endif %}</p>
-                                    </div>
-                                    <p class="text-primary">{{ visit.priceNetInterview|number_format(2, ',', ' ') }} zł</p>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label required">Postprodukcja {{ visit.postproductionShare|number_format(2, '.', ' ') }} %</label>
-                                        <p>{% if visit.postproductionOwner is not empty %} {{ visit.postproductionOwner.fullName }} {% endif %}</p>
-                                    </div>
-                                    <p class="text-primary">{{ visit.priceNetPostproduction|number_format(2, ',', ' ') }} zł</p>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label required">Redakcja {{ visit.editingShare|number_format(2, '.', ' ') }} %</label>
-                                        <p>{% if visit.editingOwner is not empty %} {{ visit.editingOwner.fullName }} {% endif %}</p>
-                                    </div>
-                                    <p class="text-primary">{{ visit.priceNetEditing|number_format(2, ',', ' ') }} zł</p>
-                                </div>
-                                <div>
-                                    <div class="form-group">
-                                        <label class="control-label required">Prowizja {{ visit.provisionShare|number_format(2, '.', ' ') }} %</label>
-                                        <p>{% if visit.provisionOwner is not empty %} {{ visit.provisionOwner.fullName }} {% endif %}</p>
-                                    </div>
-                                    <p class="text-primary">{{ visit.priceNetProvision|number_format(2, ',', ' ') }} zł</p>
+                                <div class="col-md-8">
+                                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                    <h3>Koszty</h3>
+                                    <p><a href="{{ path('visit_costs', {visitId: visit.id}) }}" class="btn btn-primary">Edytuj koszty</a></p>
+                                    <table class="table">
+                                        <tr>
+                                            <th>Rola</th>
+                                            <th>Osoba</th>
+                                            <th>Kwota</th>
+                                        </tr>
+                                        {% for cost in visit.costs %}
+                                            <tr>
+                                                <td>{{ cost.visitRole.name }}</td>
+                                                <td>{{ cost.user.fullName }}</td>
+                                                <td>{{ cost.price|number_format(2, ',', ' ') }} zł</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                    <h3>Suma: {{ visit.costSum|number_format(2, ',', ' ') }} zł</h3>
+                                {% endif %}
                                 </div>
                             </div>
                         </div>

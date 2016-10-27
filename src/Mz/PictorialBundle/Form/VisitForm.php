@@ -55,25 +55,21 @@ class VisitForm extends AbstractType
             ->add('firstname', 'text', array(
                 'label' => 'Imię',
                 'constraints' => array(
-                    new Assert\NotBlank()
                 )
             ))
             ->add('lastname', 'text', array(
                 'label' => 'Nazwisko',
                 'constraints' => array(
-                    new Assert\NotBlank()
                 )
             ))
             ->add('city', 'text', array(
                 'label' => 'Miasto',
                 'constraints' => array(
-                    new Assert\NotBlank()
                 )
             ))
             ->add('district', 'text', array(
                 'label' => 'Dzielnica',
                 'constraints' => array(
-                    new Assert\NotBlank()
                 )
             ))
             ->add('cardNumber', 'text', array(
@@ -136,85 +132,11 @@ class VisitForm extends AbstractType
                 'constraints' => array(
                 )
             ))
-            ->add('scountingOwner', 'entity', array(
-                'label' => 'Scouting '.number_format($this->visitService->getDefaultScountingShare(), 2,".", "")."%",
+            ->add('owner', 'entity', array(
+                'label' => 'Właściciel',
                 'class' => 'MzPictorialBundle:User',
                 'property' => 'fullName',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->where('u.roles LIKE :roles')
-                        ->setParameter('roles', '%ADMIN%')
-                        ->orderBy('u.id')
-                        ;
-                },
-                'constraints' => array(
-                    new Assert\NotBlank()
-                )
-            ))
-            ->add('photoOwner', 'entity', array(
-                'label' => 'Zdjęcia '.number_format($this->visitService->getDefaultPhotoShare(), 2,".", "")."%",
-                'class' => 'MzPictorialBundle:User',
-                'property' => 'fullName',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->where('u.roles LIKE :roles')
-                        ->setParameter('roles', '%ADMIN%')
-                        ->orderBy('u.id')
-                        ;
-                },
-                'constraints' => array(
-                    new Assert\NotBlank()
-                )
-            ))
-            ->add('interviewOwner', 'entity', array(
-                'label' => 'Wywiad '.number_format($this->visitService->getDefaultInterviewShare(), 2,".", "")."%",
-                'class' => 'MzPictorialBundle:User',
-                'property' => 'fullName',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->where('u.roles LIKE :roles')
-                        ->setParameter('roles', '%ADMIN%')
-                        ->orderBy('u.id')
-                        ;
-                },
-                'constraints' => array(
-                    new Assert\NotBlank()
-                )
-            ))
-            ->add('postproductionOwner', 'entity', array(
-                'label' => 'Postprodukcja '.number_format($this->visitService->getDefaultPostproductionShare(), 2,".", "")."%",
-                'class' => 'MzPictorialBundle:User',
-                'property' => 'fullName',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->where('u.roles LIKE :roles')
-                        ->setParameter('roles', '%ADMIN%')
-                        ->orderBy('u.id')
-                        ;
-                },
-                'constraints' => array(
-                    new Assert\NotBlank()
-                )
-            ))
-            ->add('editingOwner', 'entity', array(
-                'label' => 'Redakcja '.number_format($this->visitService->getDefaultEditingShare(), 2,".", "")."%",
-                'class' => 'MzPictorialBundle:User',
-                'property' => 'fullName',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->where('u.roles LIKE :roles')
-                        ->setParameter('roles', '%ADMIN%')
-                        ->orderBy('u.id')
-                        ;
-                },
-                'constraints' => array(
-                    new Assert\NotBlank()
-                )
-            ))
-            ->add('provisionOwner', 'entity', array(
-                'label' => 'Prowizja '.number_format($this->visitService->getDefaultProvisionShare(), 2,".", "")."%",
-                'class' => 'MzPictorialBundle:User',
-                'property' => 'fullName',
+                'placeholder' => '',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                         ->where('u.roles LIKE :roles')

@@ -37,3 +37,18 @@
         </div>
     </div>
 {% endblock %}
+
+
+
+{% block _column_actions %}
+    <td>
+        <div class="row">
+            <div class="col-md-4">
+                <a class="btn btn-primary btn-xs" href="{{ path('user_edit', {id: row.id}) }}">Edycja</a>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-danger btn-xs" href="{{ path('user_pricelist', {userId: row.id}) }}">Cennik</a>
+            </div>
+        </div>
+    </td>
+{% endblock %}

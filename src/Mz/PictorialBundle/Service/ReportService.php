@@ -11,6 +11,7 @@ use Mz\PictorialBundle\Entity\Package;
 use Mz\PictorialBundle\Entity\Publication;
 use Mz\PictorialBundle\Entity\User;
 use Mz\PictorialBundle\Entity\Visit;
+use Mz\PictorialBundle\Entity\VisitCost;
 use Mz\PictorialBundle\Model\ReportClientFilter;
 use Mz\PictorialBundle\Model\ReportSettlementFilter;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -71,12 +72,12 @@ class ReportService
     public function getVisitsToSettlementReport(ReportSettlementFilter $filters)
     {
         $builder = $this->em->createQueryBuilder();
-        $builder->select('v, p')
+        $builder->select('v, c')
             ->from('MzPictorialBundle:Visit', 'v')
-            ->innerJoin('v.package', 'p')
+            ->innerJoin('v.costs', 'c')
             ->orderBy('v.visitDate', 'DESC')
-            ->where('v.scountingOwner = :user OR v.photoOwner = :user OR v.interviewOwner = :user OR v.postproductionOwner = :user OR v.editingOwner = :user OR v.provisionOwner = :user')
-                ->setParameter('user', $filters->getUser()->getId());
+            ->where('c.user = :user')
+            ->setParameter('user', $filters->getUser()->getId());
 
         if ($filters->getDateFrom() instanceof \DateTime) {
             $builder->andWhere('v.visitDate >= :dateFrom')->setParameter('dateFrom', $filters->getDateFrom());
@@ -85,15 +86,15 @@ class ReportService
             $builder->andWhere('v.visitDate <= :dateTo')->setParameter('dateTo', $filters->getDateTo());
         }
 
-        $visits = $builder->getQuery()->getResult();
+        $data = $builder->getQuery()->getResult();
         $result = array(
             'visits' => array(),
             'totalNet' => 0.00,
             'totalGross' => 0.00
         );
         /** @var Visit $visit */
-        foreach ($visits as $visit) {
-            $paymentNet = $this->visitService->calculateUserVisitPayment($visit, $filters->getUser());
+        foreach ($data as $visit) {
+            $paymentNet = $visit->getCostSum();
             $result['visits'][] = array(
                 'id' => $visit->getId(),
                 'number' => $visit->getNumber(),
@@ -103,7 +104,8 @@ class ReportService
                 'paymentStatus' => $this->visitService->getPaymentStatusesText($visit->getPaymentStatus()),
                 'packageStatus' => $this->packageService->getStatusText($visit->getPackage()->getStatus()),
                 'package' => $visit->getPackage(),
-                'payment' => $paymentNet
+                'payment' => $paymentNet,
+                'costs' => $visit->getCosts()
             );
             $result['totalNet'] += $paymentNet;
             $result['totalGross'] += ($paymentNet + ($paymentNet * 0.23));
@@ -121,7 +123,7 @@ class ReportService
         $builder->select('v, p, o')
             ->from('MzPictorialBundle:Visit', 'v')
             ->innerJoin('v.package', 'p')
-            ->leftJoin('v.photoOwner', 'o')
+            ->leftJoin('v.owner', 'o')
             ->orderBy('v.number', 'ASC')
             ->where('1=1');
         if ($filters->getPackage() instanceof Package) {
@@ -184,9 +186,10 @@ class ReportService
             }
             $activesheet->setCellValue('G'.$rowCursor, implode(', ', $catArr));
             $activesheet->setCellValue('H'.$rowCursor, $this->visitService->getContactSourcesText($visit->getContactSource()));
-            $activesheet->setCellValue('I'.$rowCursor, $visit->getCardNumber());
-            if ($visit->getPhotoOwner() instanceof User) {
-                $activesheet->setCellValue('J'.$rowCursor, $visit->getPhotoOwner()->getFullName());
+            $activesheet->setCellValueExplicit('I'.$rowCursor, $visit->getCardNumber(), \PHPExcel_Cell_DataType::TYPE_STRING);
+
+            if ($visit->getOwner() instanceof User) {
+                $activesheet->setCellValue('J'.$rowCursor, $visit->getOwner()->getFullName());
             }
             $activesheet->setCellValue('K'.$rowCursor, $this->visitService->getRealizationStatusesText($visit->getRealizationStatus()));
             switch ($visit->getRealizationStatus()) {
@@ -231,7 +234,7 @@ class ReportService
                     );
                     break;
             }
-            $activesheet->setCellValue('L'.$rowCursor, $visit->getDistrict());
+            $activesheet->setCellValue('L'.$rowCursor, $visit->getRestrictions());
             /** @var Publication $publication */
             $publicationArray = array();
             foreach ($visit->getPublications() as $publication) {
@@ -273,6 +276,7 @@ class ReportService
         $builder->select('v.realizationStatus, COUNT(v) AS amount')
             ->from('MzPictorialBundle:Visit', 'v', 'v.realizationStatus')
             ->groupBy('v.realizationStatus');
+
         $result = $builder->getQuery()->getArrayResult();
         $stat = array();
         foreach ($this->visitService->getRealizationStatuses() as $statusKey => $statusText) {
@@ -295,7 +299,8 @@ class ReportService
         $builder = $this->em->createQueryBuilder();
         $builder->select('v.city, COUNT(v) AS amount')
             ->from('MzPictorialBundle:Visit', 'v')
-            ->groupBy('v.city');
+            ->groupBy('v.city')
+            ->orderBy('amount', 'DESC');
         return $builder->getQuery()->getArrayResult();
     }
 
@@ -331,7 +336,7 @@ class ReportService
         $builder->select('COUNT(p)')
             ->from('MzPictorialBundle:Package', 'p')
             ->where('p.status LIKE :status')
-            ->setParameter('status', 'delayed')
+            ->setParameter('status', 'commissioned')
         ;
         return $builder->getQuery()->getSingleScalarResult();
     }

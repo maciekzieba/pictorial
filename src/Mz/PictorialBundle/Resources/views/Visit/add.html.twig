@@ -93,6 +93,7 @@
                                 </div>
                             </div>
                             <div class="row">
+
                                 <div class="col-md-6">
                                     {{ form_row(form.city) }}
                                 </div>
@@ -115,6 +116,9 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-2">
+                                    {{ form_row(form.owner) }}
+                                </div>
+                                <div class="col-md-2">
                                     {{ form_row(form.paymentStatus) }}
                                 </div>
                                 <div class="col-md-2">
@@ -122,24 +126,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-2">
-                                    {{ form_row(form.scountingOwner) }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form_row(form.photoOwner) }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form_row(form.interviewOwner) }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form_row(form.postproductionOwner) }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form_row(form.editingOwner) }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form_row(form.provisionOwner) }}
-                                </div>
+
                             </div>
                         </div>
                     </div>

@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class ReportController extends Controller
 {
@@ -28,8 +29,10 @@ class ReportController extends Controller
      */
     protected $packageService;
 
+
     /**
      * @Route("/report/client", name="report_client")
+     * @Security("has_role('ROLE_CLIENT')")
      * @Template()
      */
     public function clientAction(Request $request)
@@ -53,6 +56,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/report/settlement", name="report_settlement")
+     * @Security("has_role('ROLE_ADMIN')")
      * @Template()
      */
     public function settlementAction(Request $request)

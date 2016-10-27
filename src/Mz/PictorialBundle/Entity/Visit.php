@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Visit
  *
- * @ORM\Table(name="visit", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="fk_package_user1_idx", columns={"updated_by"}), @ORM\Index(name="fk_package_user2_idx", columns={"created_by"}), @ORM\Index(name="fk_visit_package1_idx", columns={"package"}), @ORM\Index(name="fk_visit_user1_idx", columns={"scounting_owner"}), @ORM\Index(name="fk_visit_user2_idx", columns={"photo_owner"}), @ORM\Index(name="fk_visit_user3_idx", columns={"interview_owner"}), @ORM\Index(name="fk_visit_user4_idx", columns={"postproduction_owner"}), @ORM\Index(name="fk_visit_user5_idx", columns={"editing_owner"}), @ORM\Index(name="fk_visit_user6_idx", columns={"provision_owner"})})
+ * @ORM\Table(name="visit", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="fk_package_user1_idx", columns={"updated_by"}), @ORM\Index(name="fk_package_user2_idx", columns={"created_by"}), @ORM\Index(name="fk_visit_package1_idx", columns={"package"}), @ORM\Index(name="fk_visit_user7_idx", columns={"owner"})})
  * @ORM\Entity
  */
 class Visit
@@ -151,48 +151,6 @@ class Visit
     /**
      * @var float
      *
-     * @ORM\Column(name="scounting_share", type="float", precision=10, scale=0, nullable=true)
-     */
-    private $scountingShare = 5.00;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="photo_share", type="float", precision=10, scale=0, nullable=true)
-     */
-    private $photoShare = 50.00;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="interview_share", type="float", precision=10, scale=0, nullable=true)
-     */
-    private $interviewShare = 20.00;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="postproduction_share", type="float", precision=10, scale=0, nullable=true)
-     */
-    private $postproductionShare = 15.00;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="editing_share", type="float", precision=10, scale=0, nullable=true)
-     */
-    private $editingShare = 5.00;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="provision_share", type="float", precision=10, scale=0, nullable=true)
-     */
-    private $provisionShare = 5.00;
-
-    /**
-     * @var float
-     *
      * @ORM\Column(name="externals_costs", type="float", precision=10, scale=0, nullable=true)
      */
     private $externalsCosts;
@@ -208,7 +166,7 @@ class Visit
     private $updatedBy;
 
     /**
-     * @var \User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -218,7 +176,7 @@ class Visit
     private $createdBy;
 
     /**
-     * @var \Package
+     * @var Package
      *
      * @ORM\ManyToOne(targetEntity="Package")
      * @ORM\JoinColumns({
@@ -228,64 +186,14 @@ class Visit
     private $package;
 
     /**
-     * @var \User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="scounting_owner", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="owner", referencedColumnName="id")
      * })
      */
-    private $scountingOwner;
-
-    /**
-     * @var \User
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="photo_owner", referencedColumnName="id")
-     * })
-     */
-    private $photoOwner;
-
-    /**
-     * @var \User
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="interview_owner", referencedColumnName="id")
-     * })
-     */
-    private $interviewOwner;
-
-    /**
-     * @var \User
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="postproduction_owner", referencedColumnName="id")
-     * })
-     */
-    private $postproductionOwner;
-
-    /**
-     * @var \User
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="editing_owner", referencedColumnName="id")
-     * })
-     */
-    private $editingOwner;
-
-    /**
-     * @var \User
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="provision_owner", referencedColumnName="id")
-     * })
-     */
-    private $provisionOwner;
+    private $owner;
 
     /**
      * @var ArrayCollection
@@ -293,6 +201,13 @@ class Visit
      * @ORM\OneToMany(targetEntity="Publication", mappedBy="visit", cascade="persist", orphanRemoval=true)
      */
     private $publications;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="VisitCost", mappedBy="visit", cascade="persist", orphanRemoval=true)
+     */
+    private $costs;
 
     /**
      * @var ArrayCollection
@@ -310,8 +225,44 @@ class Visit
      */
     public function __construct()
     {
-        $this->visits = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->publications = new ArrayCollection();
+        $this->costs = new ArrayCollection();
+    }
+
+    /**
+     * Add cost
+     *
+     * @param \Mz\PictorialBundle\Entity\VisitCost $visitCost
+     *
+     * @return Visit
+     */
+    public function addCost(\Mz\PictorialBundle\Entity\VisitCost $visitCost)
+    {
+        $visitCost->setVisit($this);
+        $this->costs[] = $visitCost;
+
+        return $this;
+    }
+
+    /**
+     * Remove cost
+     *
+     * @param \Mz\PictorialBundle\Entity\VisitCost $visitCost
+     */
+    public function removeCost(\Mz\PictorialBundle\Entity\VisitCost $visitCost)
+    {
+        $this->costs->removeElement($visitCost);
+    }
+
+    /**
+     * Get costs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCosts()
+    {
+        return $this->costs;
     }
 
     /**
@@ -801,150 +752,6 @@ class Visit
     }
 
     /**
-     * Set scountingShare
-     *
-     * @param float $scountingShare
-     *
-     * @return Visit
-     */
-    public function setScountingShare($scountingShare)
-    {
-        $this->scountingShare = $scountingShare;
-
-        return $this;
-    }
-
-    /**
-     * Get scountingShare
-     *
-     * @return float
-     */
-    public function getScountingShare()
-    {
-        return $this->scountingShare;
-    }
-
-    /**
-     * Set photoShare
-     *
-     * @param float $photoShare
-     *
-     * @return Visit
-     */
-    public function setPhotoShare($photoShare)
-    {
-        $this->photoShare = $photoShare;
-
-        return $this;
-    }
-
-    /**
-     * Get photoShare
-     *
-     * @return float
-     */
-    public function getPhotoShare()
-    {
-        return $this->photoShare;
-    }
-
-    /**
-     * Set interviewShare
-     *
-     * @param float $interviewShare
-     *
-     * @return Visit
-     */
-    public function setInterviewShare($interviewShare)
-    {
-        $this->interviewShare = $interviewShare;
-
-        return $this;
-    }
-
-    /**
-     * Get interviewShare
-     *
-     * @return float
-     */
-    public function getInterviewShare()
-    {
-        return $this->interviewShare;
-    }
-
-    /**
-     * Set postproductionShare
-     *
-     * @param float $postproductionShare
-     *
-     * @return Visit
-     */
-    public function setPostproductionShare($postproductionShare)
-    {
-        $this->postproductionShare = $postproductionShare;
-
-        return $this;
-    }
-
-    /**
-     * Get postproductionShare
-     *
-     * @return float
-     */
-    public function getPostproductionShare()
-    {
-        return $this->postproductionShare;
-    }
-
-    /**
-     * Set editingShare
-     *
-     * @param float $editingShare
-     *
-     * @return Visit
-     */
-    public function setEditingShare($editingShare)
-    {
-        $this->editingShare = $editingShare;
-
-        return $this;
-    }
-
-    /**
-     * Get editingShare
-     *
-     * @return float
-     */
-    public function getEditingShare()
-    {
-        return $this->editingShare;
-    }
-
-    /**
-     * Set provisionShare
-     *
-     * @param float $provisionShare
-     *
-     * @return Visit
-     */
-    public function setProvisionShare($provisionShare)
-    {
-        $this->provisionShare = $provisionShare;
-
-        return $this;
-    }
-
-    /**
-     * Get provisionShare
-     *
-     * @return float
-     */
-    public function getProvisionShare()
-    {
-        return $this->provisionShare;
-    }
-
-    /**
      * Set externalsCosts
      *
      * @param float $externalsCosts
@@ -1041,213 +848,36 @@ class Visit
     }
 
     /**
-     * Set scountingOwner
+     * Set owner
      *
-     * @param \Mz\PictorialBundle\Entity\User $scountingOwner
+     * @param \Mz\PictorialBundle\Entity\User $owner
      *
      * @return Visit
      */
-    public function setScountingOwner(\Mz\PictorialBundle\Entity\User $scountingOwner = null)
+    public function setOwner(\Mz\PictorialBundle\Entity\User $owner = null)
     {
-        $this->scountingOwner = $scountingOwner;
+        $this->owner = $owner;
 
         return $this;
     }
 
     /**
-     * Get scountingOwner
+     * Get owner
      *
      * @return \Mz\PictorialBundle\Entity\User
      */
-    public function getScountingOwner()
+    public function getOwner()
     {
-        return $this->scountingOwner;
+        return $this->owner;
     }
 
-    /**
-     * Set photoOwner
-     *
-     * @param \Mz\PictorialBundle\Entity\User $photoOwner
-     *
-     * @return Visit
-     */
-    public function setPhotoOwner(\Mz\PictorialBundle\Entity\User $photoOwner = null)
+    public function getCostSum()
     {
-        $this->photoOwner = $photoOwner;
-
-        return $this;
-    }
-
-    /**
-     * Get photoOwner
-     *
-     * @return \Mz\PictorialBundle\Entity\User
-     */
-    public function getPhotoOwner()
-    {
-        return $this->photoOwner;
-    }
-
-    /**
-     * Set interviewOwner
-     *
-     * @param \Mz\PictorialBundle\Entity\User $interviewOwner
-     *
-     * @return Visit
-     */
-    public function setInterviewOwner(\Mz\PictorialBundle\Entity\User $interviewOwner = null)
-    {
-        $this->interviewOwner = $interviewOwner;
-
-        return $this;
-    }
-
-    /**
-     * Get interviewOwner
-     *
-     * @return \Mz\PictorialBundle\Entity\User
-     */
-    public function getInterviewOwner()
-    {
-        return $this->interviewOwner;
-    }
-
-    /**
-     * Set postproductionOwner
-     *
-     * @param \Mz\PictorialBundle\Entity\User $postproductionOwner
-     *
-     * @return Visit
-     */
-    public function setPostproductionOwner(\Mz\PictorialBundle\Entity\User $postproductionOwner = null)
-    {
-        $this->postproductionOwner = $postproductionOwner;
-
-        return $this;
-    }
-
-    /**
-     * Get postproductionOwner
-     *
-     * @return \Mz\PictorialBundle\Entity\User
-     */
-    public function getPostproductionOwner()
-    {
-        return $this->postproductionOwner;
-    }
-
-    /**
-     * Set editingOwner
-     *
-     * @param \Mz\PictorialBundle\Entity\User $editingOwner
-     *
-     * @return Visit
-     */
-    public function setEditingOwner(\Mz\PictorialBundle\Entity\User $editingOwner = null)
-    {
-        $this->editingOwner = $editingOwner;
-
-        return $this;
-    }
-
-    /**
-     * Get editingOwner
-     *
-     * @return \Mz\PictorialBundle\Entity\User
-     */
-    public function getEditingOwner()
-    {
-        return $this->editingOwner;
-    }
-
-    /**
-     * Set provisionOwner
-     *
-     * @param \Mz\PictorialBundle\Entity\User $provisionOwner
-     *
-     * @return Visit
-     */
-    public function setProvisionOwner(\Mz\PictorialBundle\Entity\User $provisionOwner = null)
-    {
-        $this->provisionOwner = $provisionOwner;
-
-        return $this;
-    }
-
-    /**
-     * Get provisionOwner
-     *
-     * @return \Mz\PictorialBundle\Entity\User
-     */
-    public function getProvisionOwner()
-    {
-        return $this->provisionOwner;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPriceNetScouting()
-    {
-        if ($this->package instanceof Package) {
-            return ($this->package->getPriceNetPerVisit()*$this->getScountingShare())/100;
+        $sum = 0.0;
+        /** @var VisitCost $cost */
+        foreach ($this->getCosts() as $cost) {
+            $sum += $cost->getPrice();
         }
-        return 0.00;
+        return $sum;
     }
-
-    /**
-     * @return float
-     */
-    public function getPriceNetPhoto()
-    {
-        if ($this->package instanceof Package) {
-            return ($this->package->getPriceNetPerVisit()*$this->getPhotoShare())/100;
-        }
-        return 0.00;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPriceNetEditing()
-    {
-        if ($this->package instanceof Package) {
-            return ($this->package->getPriceNetPerVisit()*$this->getEditingShare())/100;
-        }
-        return 0.00;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPriceNetInterview()
-    {
-        if ($this->package instanceof Package) {
-            return ($this->package->getPriceNetPerVisit()*$this->getInterviewShare())/100;
-        }
-        return 0.00;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPriceNetPostproduction()
-    {
-        if ($this->package instanceof Package) {
-            return ($this->package->getPriceNetPerVisit()*$this->getPostproductionShare())/100;
-        }
-        return 0.00;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPriceNetProvision()
-    {
-        if ($this->package instanceof Package) {
-            return ($this->package->getPriceNetPerVisit()*$this->getProvisionShare())/100;
-        }
-        return 0.00;
-    }
-
 }

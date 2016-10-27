@@ -62,8 +62,8 @@ class VisitListing extends AbstractType
                     'expression' => "v.paymentStatus LIKE ?",
                 )
             ))
-            ->add('photoOwner', 'entity', array(
-                'label' => 'Zdjęcia',
+            ->add('owner', 'entity', array(
+                'label' => 'Właściciel',
                 'class' => 'MzPictorialBundle:User',
                 'property' => 'fullName',
                 'placeholder' => '',
@@ -75,7 +75,7 @@ class VisitListing extends AbstractType
                         ;
                 },
                 'filter' => array(
-                    'expression' => "v.photoOwner = ?",
+                    'expression' => "v.owner = ?",
                 )
             ))
             ->add('package', 'entity', array(
@@ -109,10 +109,10 @@ class VisitListing extends AbstractType
                 'property' => 'package.fullName',
                 'order_by' => false
             ))
-            ->add('photoOwner', 'column', array(
-                'label' => 'Zdjęcia',
+            ->add('owner', 'column', array(
+                'label' => 'Właścicel',
                 'order_by' => false,
-                'property' => 'photoOwner.fullName'
+                'property' => 'owner.fullName'
             ))
             ->add('cardNumber', 'column', array(
                 'label' => 'Numer karty',
@@ -162,10 +162,10 @@ class VisitListing extends AbstractType
         $resolver->setDefaults(array(
             'page_length' => 100,
             'query_builder' => function (QueryBuilder $builder) {
-                $builder->select('v, p, po')
+                $builder->select('v, p, o')
                     ->from('MzPictorialBundle:Visit', 'v')
                     ->leftJoin('v.package', 'p')
-                    ->leftJoin('v.photoOwner', 'po');
+                    ->leftJoin('v.owner', 'o');
 
             },
         ));
